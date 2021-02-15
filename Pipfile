@@ -7,6 +7,10 @@ name = "pypi"
 flask = "*"
 flask-pymongo = "*"
 dnspython = "*"
+scrapy = "*"
+spacy = "*"
+pylatexenc = "*"
+flask-cors = "*"
 
 [dev-packages]
 

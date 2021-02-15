@@ -1,0 +1,8 @@
+{
+	"models": [
+		{
+			"name": "hbp",
+			"entities": ["TYPE", "LUMINOSITY", "ENERGY", "DECAY_A", "COLLISION","PRODUCTION", "MODEL", "DECAY_B"]
+		}
+	]
+}

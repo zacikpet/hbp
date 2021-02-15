@@ -1,0 +1,8 @@
+{
+	"models": [
+		{
+			"name": "hbp",
+			"entities": ["ORIGINAL", "INTERMEDIATE", "PRODUCT", ""]
+		}
+	]
+}
