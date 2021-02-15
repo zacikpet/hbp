@@ -17,7 +17,6 @@ db = PyMongo(app, db_uri).db
 def get_papers():
     papers = db.papers.find()
     output = list(papers)
-    print(output)
     for item in output:
         del item['_id']
     return jsonify(output), 200, {'Content-Type': 'application/json'}
