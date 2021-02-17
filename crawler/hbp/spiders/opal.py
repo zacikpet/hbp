@@ -2,7 +2,9 @@ from .cds import CdsScraper
 
 
 class OpalScraper(CdsScraper):
-    name = 'opal'
+    name = 'opal_papers'
+    experiment = 'opal'
+    type = 'paper'
 
     urls = [
         'https://cds.cern.ch/search?cc=OPAL+Papers&ln=en&jrec=1&rg=200&p=higgs',

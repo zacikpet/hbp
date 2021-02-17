@@ -1,34 +1,38 @@
 import click
 import pymongo
 import scrapy
+from flask.cli import with_appcontext
+from config import db_uri
 from ner import nlp
 from ner.extractors.extract import get_luminosity, get_energy, get_collision, get_production
 from ner.converters import get_article_text
-from scrapy.crawler import CrawlerProcess
-from scrapy.utils.project import get_project_settings
-from flask.cli import with_appcontext
-from config import db_uri
-from crawler.hbp.spiders.atlas import AtlasScraper
-from crawler.hbp.spiders.cms import CmsScraper
+from crawler.hbp.spiders.atlas import AtlasScraper, AtlasNotesScraper
+from crawler.hbp.spiders.cms import CmsScraper, CmsNotesScraper
 from crawler.hbp.spiders.aleph import AlephScraper
 from crawler.hbp.spiders.delphi import DelphiScraper
 from crawler.hbp.spiders.l3 import L3Scraper
 from crawler.hbp.spiders.opal import OpalScraper
 from crawler.hbp.spiders.test import TestScraper
+from scrapy.crawler import CrawlerProcess
+from scrapy.utils.project import get_project_settings
 from scrapy.signals import item_passed
 from scrapy.signalmanager import dispatcher
 
 mongo = pymongo.MongoClient(db_uri)
 papers: pymongo.collection.Collection = mongo.hbp.papers
 
-spider_names = ['atlas', 'cms', 'aleph', 'delphi', 'l3', 'opal']
+experiments = ['atlas', 'cms', 'aleph', 'delphi', 'l3', 'opal', 'atlas_notes', 'cms_notes']
 
 
 def get_spider(name: str) -> scrapy.Spider:
     if name == 'atlas':
         return AtlasScraper
+    elif name == 'atlas_notes':
+        return AtlasNotesScraper
     elif name == 'cms':
         return CmsScraper
+    elif name == 'cms_notes':
+        return CmsNotesScraper
     elif name == 'aleph':
         return AlephScraper
     elif name == 'delphi':
@@ -49,7 +53,7 @@ def get_spider(name: str) -> scrapy.Spider:
 def crawl(experiment: str = None):
     if experiment is None:
         print('Crawling all')
-        spiders = [get_spider(name) for name in spider_names]
+        spiders = [get_spider(name) for name in experiments]
     else:
         print('Crawling' + experiment)
         spiders = [get_spider(experiment)]
@@ -74,7 +78,6 @@ def crawl(experiment: str = None):
         papers.delete_many({'experiment': experiment})
 
     papers.insert_many(results)
-    update(experiment)
 
 
 def flatten(list_of_lists):
@@ -121,10 +124,7 @@ def extract_energy(item):
 
 def extract_collision(item):
     if item['experiment'] in ['aleph', 'delphi', 'l3', 'opal']:
-        return {
-            **item,
-            'collision': 'ee'
-        }
+        return {**item, 'collision': 'ee'}
     else:
         return {
             **item,
@@ -135,7 +135,9 @@ def extract_collision(item):
 def extract_production(item):
     return {
         **item,
-        'production': list(set([prod for prod in [get_production(ent['value']) for ent in item['entities'] if ent['name'] == 'PRODUCTION'] if prod is not None]))
+        'production': list(set(
+            [prod for prod in [get_production(ent['value']) for ent in item['entities'] if ent['name'] == 'PRODUCTION']
+             if prod is not None]))
     }
 
 
@@ -170,3 +172,13 @@ def update(experiment: str = None):
         papers.delete_many({'experiment': experiment})
 
     papers.insert_many(processed)
+
+
+@click.command('connect')
+@with_appcontext
+def connect():
+    data = papers.find({})
+    for item in data:
+        if item['report_number'] is not None:
+            related = papers.find({'report_number': {'$regex': f".*{item['report_number']}.*"}})
+            papers.update_one(item, {'$set': {'related': [r['_id'] for r in related if r['_id'] != item['_id']]}})

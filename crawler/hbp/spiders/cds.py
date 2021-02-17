@@ -1,10 +1,11 @@
 import scrapy
 import urllib.parse as urlparse
+from typing import Optional
 
 
 class CdsScraper(scrapy.Spider):
-    name = "cds"
-
+    experiment = None
+    type = None
     urls = []
 
     def start_requests(self):
@@ -49,9 +50,14 @@ class CdsScraper(scrapy.Spider):
         date = self.extract_date(response)
         abstract = self.extract_abstract(response)
         doi = self.extract_doi(response)
+        report_number = self.extract_report_number(response)
+        related = self.extract_related(response)
 
         yield {
-            'experiment': self.name,
+            'experiment': self.experiment,
+            'type': self.type,
+            'report_number': report_number,
+            'related': related,
             'title': title,
             'link': link,
             'date': date,
@@ -133,8 +139,26 @@ class CdsScraper(scrapy.Spider):
         return date_created
 
     @staticmethod
-    def extract_abstract(document) -> str:
-        return document.xpath('//td[normalize-space() = "Abstract"]/following-sibling::td//text()').get()
+    def table_item(document, name_match: str):
+
+        results = document.xpath(
+            '//table[@class = "formatRecordTableFullWidth"]//'
+            'td[1][contains(translate(normalize-space(.), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", '
+            '"abcdefghijklmnopqrstuvwxyz"), "' + name_match.lower() + '")]/following-sibling::td//text()').getall()
+
+        return ' '.join(results)
+
+    @classmethod
+    def extract_abstract(cls, document) -> str:
+        return cls.table_item(document, 'abstract')
+
+    @classmethod
+    def extract_report_number(cls, document) -> str:
+        return cls.table_item(document, 'report number')
+
+    @classmethod
+    def extract_related(cls, document) -> Optional[str]:
+        return cls.table_item(document, 'related')
 
     @staticmethod
     def extract_doi(document) -> str:

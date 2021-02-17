@@ -3,39 +3,39 @@ import re
 from typing import List, Optional
 
 
-# Returns luminosity in inverse femtobarns
+# Returns luminosity in inverse picobarns
 def get_luminosity(text: str) -> List[float]:
     units = [
-        ('pb', 0.001),
-        ('fb', 1),
-        ('pico', 0.001),
-        ('femto', 1)
+        ('pb', 1),
+        ('fb', 1_000),
+        ('pico', 1),
+        ('femto', 1_000)
     ]
-
-    multiplier = 1
 
     for unit, coefficient in units:
         if unit in text.lower():
             multiplier = coefficient
             break
+    else:
+        multiplier = 1_000
 
     return [multiplier * float(x) for x in re.findall(r"[-+]?\d+\.*\d*", text) if x not in ['1', '-1']]
 
 
-# Returns centre of mass energy in TeV
+# Returns centre of mass energy in MeV
 def get_energy(text: str) -> List[float]:
     units = [
-        ('mev', 1_000_000),
+        ('mev', 1),
         ('gev', 1_000),
-        ('tev', 1)
+        ('tev', 1_000_000)
     ]
-
-    multiplier = 1
 
     for unit, coefficient in units:
         if unit in text.lower():
             multiplier = coefficient
             break
+    else:
+        multiplier = 1_000_000
 
     energies = [multiplier * float(x) for x in re.findall(r"\d+\.*\d*", text)]
 
