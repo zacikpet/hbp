@@ -4,13 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = "*"
-flask-pymongo = "*"
+Flask = "*"
+Flask-PyMongo = "*"
 dnspython = "*"
-scrapy = "*"
+Scrapy = "*"
 spacy = "*"
 pylatexenc = "*"
-flask-cors = "*"
+Flask-Cors = "*"
+dateparser = "*"
 
 [dev-packages]
 

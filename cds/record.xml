@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+<record>
+  <controlfield tag="001">2744133</controlfield>
+  <datafield tag="245" ind1=" " ind2=" ">
+    <subfield code="a">Search for a heavy Higgs boson decaying into a $Z$ boson and another heavy Higgs boson in the $\ell\ell bb$ and $\ell \ell WW$ final states in $pp$ collisions at $\sqrt{s}=13$ TeV with the ATLAS detector</subfield>
+  </datafield>
+  <datafield tag="269" ind1=" " ind2=" ">
+    <subfield code="b">CERN</subfield>
+    <subfield code="a">Geneva</subfield>
+    <subfield code="c">11 Nov 2020</subfield>
+  </datafield>
+  <datafield tag="520" ind1=" " ind2=" ">
+    <subfield code="a">A search for a heavy neutral Higgs boson, $A$, decaying into a $Z$ boson and another heavy Higgs boson, $H$, is performed using a data sample corresponding to an integrated luminosity of 139 fb$^{-1}$ from proton-proton collisions at $\sqrt{s} = 13$ TeV recorded by the ATLAS detector at the LHC. The search considers the $Z$ boson decaying into electrons or muons and the $H$ boson into a pair of $b$-quarks or $W$ bosons. The mass range considered  is 230-800 GeV for the $A$ boson and  130-700 GeV for the $H$ boson. The data are in good agreement with the background predicted by the Standard Model, and therefore 95 % confidence-level upper limits for $\sigma\times B(A\to ZH)\times B(H\to bb \; \textrm{or} \; H \to WW)$ are set. The upper limits are in the range 0.0062-0.380 pb for the $H\to bb$ channel and in the range 0.023- 8.9 pb for the $H\to WW$ channel. An interpretation of the results in the context of two-Higgs-doublet models is also given.</subfield>
+  </datafield>
+  <datafield tag="520" ind1=" " ind2=" ">
+    <subfield code="9">arXiv</subfield>
+    <subfield code="a">A search for a heavy neutral Higgs boson, $A$, decaying into a $Z$ boson and another heavy Higgs boson, $H$, is performed using a data sample corresponding to an integrated luminosity of 139 fb$^{-1}$ from proton-proton collisions at $\sqrt{s}$ = 13 TeV recorded by the ATLAS detector at the LHC. The search considers the $Z$ boson decaying into electrons or muons and the $H$ boson into a pair of $b$-quarks or $W$ bosons. The mass range considered is 230-800 GeV for the $A$ boson and 130-700 GeV for the $H$ boson. The data are in good agreement with the background predicted by the Standard Model, and therefore 95% confidence-level upper limits for $\sigma \times B(A\rightarrow ZH) \times B(H\rightarrow bb$ or $H\rightarrow WW)$ are set. The upper limits are in the range 0.0062-0.380 pb for the $H\rightarrow bb$ channel and in the range 0.023-8.9 pb for the $H\rightarrow WW$ channel. An interpretation of the results in the context of two-Higgs-Doublet models is also given.</subfield>
+  </datafield>
+  <datafield tag="780" ind1="0" ind2="2">
+  </datafield>
+</record>
+
+</collection>

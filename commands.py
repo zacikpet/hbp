@@ -1,7 +1,9 @@
+from typing import Type, List
+
 import click
 import pymongo
-import scrapy
 from flask.cli import with_appcontext
+from cds.search import get_all, get
 from config import db_uri
 from ner import nlp
 from ner.extractors.extract import get_luminosity, get_energy, get_collision, get_production
@@ -12,6 +14,7 @@ from crawler.hbp.spiders.aleph import AlephScraper
 from crawler.hbp.spiders.delphi import DelphiScraper
 from crawler.hbp.spiders.l3 import L3Scraper
 from crawler.hbp.spiders.opal import OpalScraper
+from crawler.hbp.spiders.cds import CdsScraper
 from crawler.hbp.spiders.test import TestScraper
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
@@ -24,7 +27,7 @@ papers: pymongo.collection.Collection = mongo.hbp.papers
 experiments = ['atlas', 'cms', 'aleph', 'delphi', 'l3', 'opal', 'atlas_notes', 'cms_notes']
 
 
-def get_spider(name: str) -> scrapy.Spider:
+def get_spider(name: str) -> Type[CdsScraper]:
     if name == 'atlas':
         return AtlasScraper
     elif name == 'atlas_notes':
@@ -45,6 +48,10 @@ def get_spider(name: str) -> scrapy.Spider:
         return TestScraper
     else:
         raise Exception('No such spider.')
+
+
+def filter_duplicate(lst: List) -> List:
+    return list(set(lst))
 
 
 @click.command('crawl')
@@ -80,6 +87,25 @@ def crawl(experiment: str = None):
     papers.insert_many(results)
 
 
+@click.command('search')
+@click.option('--category', default=None, type=str)
+@with_appcontext
+def search_cds(category: str = None):
+    if category is None:
+        print('Search all')
+        results = get_all()
+    else:
+        print('Searching ' + category)
+        results = get(category)
+
+    if category is None:
+        papers.delete_many({})
+    else:
+        papers.delete_many({'category': category})
+
+    papers.insert_many(results)
+
+
 def flatten(list_of_lists):
     result = []
     for sublist in list_of_lists:
@@ -105,39 +131,44 @@ def extract_entities(item):
 
 
 def extract_luminosity(item):
+    entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'LUMINOSITY']
+
     return {
         **item,
-        'luminosity': flatten(
-            [get_luminosity(ent['value']) for ent in item['entities'] if ent['name'] == 'LUMINOSITY']
-        )
+        'luminosity': filter_duplicate(flatten([get_luminosity(entity) for entity in entities]))
     }
 
 
 def extract_energy(item):
+    entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'ENERGY']
+
     return {
         **item,
-        'energy': flatten(
-            [get_energy(ent['value']) for ent in item['entities'] if ent['name'] == 'ENERGY']
-        )
+        'energy': filter_duplicate(flatten([get_energy(entity) for entity in entities]))
     }
 
 
 def extract_collision(item):
     if item['experiment'] in ['aleph', 'delphi', 'l3', 'opal']:
-        return {**item, 'collision': 'ee'}
+        return {**item, 'collision': ['ee']}
+
     else:
+        entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'COLLISION']
         return {
             **item,
-            'collision': [get_collision(ent['value']) for ent in item['entities'] if ent['name'] == 'COLLISION']
+            'collision': filter_duplicate([get_collision(entity) for entity in entities])
         }
 
 
 def extract_production(item):
+    entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'PRODUCTION']
+    productions = [get_production(entity) for entity in entities]
+
     return {
         **item,
-        'production': list(set(
-            [prod for prod in [get_production(ent['value']) for ent in item['entities'] if ent['name'] == 'PRODUCTION']
-             if prod is not None]))
+        'production': filter_duplicate(
+            [prod for prod in productions if prod is not None]
+        )
     }
 
 
@@ -147,15 +178,15 @@ def delete_entities(item):
 
 
 @click.command('update')
-@click.option('--experiment', default=None)
+@click.option('--category', default=None)
 @with_appcontext
-def update(experiment: str = None):
-    if experiment is None:
+def update(category: str = None):
+    if category is None:
         print('Updating all')
         queryset = papers.find({})
     else:
-        print('Updating ' + experiment)
-        queryset = papers.find({'experiment': experiment})
+        print('Updating ' + category)
+        queryset = papers.find({'category': category})
 
     data = list(queryset)
 
@@ -166,10 +197,10 @@ def update(experiment: str = None):
         for item in data
     ]
 
-    if experiment is None:
+    if category is None:
         papers.delete_many({})
     else:
-        papers.delete_many({'experiment': experiment})
+        papers.delete_many({'category': category})
 
     papers.insert_many(processed)
 
@@ -179,6 +210,14 @@ def update(experiment: str = None):
 def connect():
     data = papers.find({})
     for item in data:
-        if item['report_number'] is not None:
-            related = papers.find({'report_number': {'$regex': f".*{item['report_number']}.*"}})
-            papers.update_one(item, {'$set': {'related': [r['_id'] for r in related if r['_id'] != item['_id']]}})
+        supersedes = papers.find_one({'report_number': item['supersedes']})
+        superseded = papers.find_one({'report_number': item['superseded']})
+
+        papers.update_one(item, {'$set': {'supersedes_id': supersedes['_id'] if supersedes is not None else None}})
+        papers.update_one(item, {'$set': {'superseded_id': superseded['_id'] if superseded is not None else None}})
+
+
+@click.command('erase')
+@with_appcontext
+def erase():
+    papers.delete_many({})
