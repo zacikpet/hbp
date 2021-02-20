@@ -1,90 +1,20 @@
-from typing import Type, List
-
 import click
 import pymongo
 from flask.cli import with_appcontext
 from cds.search import get_all, get
-from config import db_uri
 from ner import nlp
 from ner.extractors.extract import get_luminosity, get_energy, get_collision, get_production
 from ner.converters import get_article_text
-from crawler.hbp.spiders.atlas import AtlasScraper, AtlasNotesScraper
-from crawler.hbp.spiders.cms import CmsScraper, CmsNotesScraper
-from crawler.hbp.spiders.aleph import AlephScraper
-from crawler.hbp.spiders.delphi import DelphiScraper
-from crawler.hbp.spiders.l3 import L3Scraper
-from crawler.hbp.spiders.opal import OpalScraper
-from crawler.hbp.spiders.cds import CdsScraper
-from crawler.hbp.spiders.test import TestScraper
-from scrapy.crawler import CrawlerProcess
-from scrapy.utils.project import get_project_settings
-from scrapy.signals import item_passed
-from scrapy.signalmanager import dispatcher
+from config import db_uri
+from typing import List
+
 
 mongo = pymongo.MongoClient(db_uri)
 papers: pymongo.collection.Collection = mongo.hbp.papers
 
-experiments = ['atlas', 'cms', 'aleph', 'delphi', 'l3', 'opal', 'atlas_notes', 'cms_notes']
-
-
-def get_spider(name: str) -> Type[CdsScraper]:
-    if name == 'atlas':
-        return AtlasScraper
-    elif name == 'atlas_notes':
-        return AtlasNotesScraper
-    elif name == 'cms':
-        return CmsScraper
-    elif name == 'cms_notes':
-        return CmsNotesScraper
-    elif name == 'aleph':
-        return AlephScraper
-    elif name == 'delphi':
-        return DelphiScraper
-    elif name == 'l3':
-        return L3Scraper
-    elif name == 'opal':
-        return OpalScraper
-    elif name == 'test':
-        return TestScraper
-    else:
-        raise Exception('No such spider.')
-
 
 def filter_duplicate(lst: List) -> List:
     return list(set(lst))
-
-
-@click.command('crawl')
-@click.option('--experiment', default=None, type=str)
-@with_appcontext
-def crawl(experiment: str = None):
-    if experiment is None:
-        print('Crawling all')
-        spiders = [get_spider(name) for name in experiments]
-    else:
-        print('Crawling' + experiment)
-        spiders = [get_spider(experiment)]
-
-    process = CrawlerProcess(get_project_settings())
-
-    for spider in spiders:
-        process.crawl(spider)
-
-    results = []
-
-    def add_result(item):
-        results.append(item)
-
-    dispatcher.connect(add_result, signal=item_passed)
-
-    process.start()
-
-    if experiment is None:
-        papers.delete_many({})
-    else:
-        papers.delete_many({'experiment': experiment})
-
-    papers.insert_many(results)
 
 
 @click.command('search')
@@ -172,6 +102,16 @@ def extract_production(item):
     }
 
 
+def extract_decay_a(item):
+    entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'DECAY_A']
+    return {**item, 'decay_a': entities}
+
+
+def extract_decay_b(item):
+    entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'DECAY_B']
+    return {**item, 'decay_b': entities}
+
+
 def delete_entities(item):
     del item['entities']
     return item
@@ -193,7 +133,7 @@ def update(category: str = None):
     processed = [
         process_pipeline(item,
                          [extract_entities, extract_luminosity, extract_energy, extract_collision, extract_production,
-                          delete_entities])
+                          extract_decay_a, extract_decay_b, delete_entities])
         for item in data
     ]
 
@@ -208,13 +148,12 @@ def update(category: str = None):
 @click.command('connect')
 @with_appcontext
 def connect():
-    data = papers.find({})
-    for item in data:
-        supersedes = papers.find_one({'report_number': item['supersedes']})
-        superseded = papers.find_one({'report_number': item['superseded']})
+    for paper in papers.find({}):
+        supersedes = papers.find_one()
+        superseded = papers.find_one({'report_number': paper['superseded']})
 
-        papers.update_one(item, {'$set': {'supersedes_id': supersedes['_id'] if supersedes is not None else None}})
-        papers.update_one(item, {'$set': {'superseded_id': superseded['_id'] if superseded is not None else None}})
+        papers.update_one(paper, {'$set': {'supersedes_id': supersedes['_id'] if supersedes is not None else None}})
+        papers.update_one(paper, {'$set': {'superseded_id': superseded['_id'] if superseded is not None else None}})
 
 
 @click.command('erase')
