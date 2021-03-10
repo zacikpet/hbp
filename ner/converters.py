@@ -1,5 +1,6 @@
 import json
 from pylatexenc import latex2text
+import random
 
 
 def get_article_text(title, abstract):
@@ -33,6 +34,19 @@ def json_to_text(input_filename: str, output_filename: str) -> None:
                 abstract = item['abstract']
                 text = get_article_text(title, abstract)
                 txt_file.write(text + '\n')
+
+
+def shuffle_txt(input_filename: str, output_filename: str) -> None:
+    data = []
+    with open(input_filename) as input_file:
+        for line in input_file:
+            data.append(line)
+
+    random.shuffle(data)
+
+    with open(output_filename, 'w') as output_file:
+        for line in data:
+            output_file.write(line)
 
 
 def json_to_spacy(file):

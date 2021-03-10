@@ -12,6 +12,10 @@ spacy = "*"
 pylatexenc = "*"
 Flask-Cors = "*"
 dateparser = "*"
+ner-annotator = "*"
+pandas = "*"
+sklearn = "*"
+nltk = "*"
 
 [dev-packages]
 

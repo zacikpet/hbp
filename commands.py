@@ -1,13 +1,16 @@
 import click
 import pymongo
+import json
+from bson import json_util
 from flask.cli import with_appcontext
 from cds.search import get_all, get
 from ner import nlp
-from ner.extractors.extract import get_luminosity, get_energy, get_collision, get_production
+from ner.extractors.extract import get_luminosity, get_energy, get_collision, get_production, get_particles
 from ner.converters import get_article_text
+from ner.decay_a import nlp_decay_a
 from config import db_uri
 from typing import List
-
+from nlp.physics_model.classify import get_paper_model
 
 mongo = pymongo.MongoClient(db_uri)
 papers: pymongo.collection.Collection = mongo.hbp.papers
@@ -27,6 +30,9 @@ def search_cds(category: str = None):
     else:
         print('Searching ' + category)
         results = get(category)
+
+    with open('latest.json', 'w') as latest:
+        json.dump(results, latest, default=json_util.default)
 
     if category is None:
         papers.delete_many({})
@@ -61,7 +67,7 @@ def extract_entities(item):
 
 
 def extract_luminosity(item):
-    entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'LUMINOSITY']
+    entities = (entity['value'] for entity in item['entities'] if entity['name'] == 'LUMINOSITY')
 
     return {
         **item,
@@ -70,7 +76,7 @@ def extract_luminosity(item):
 
 
 def extract_energy(item):
-    entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'ENERGY']
+    entities = (entity['value'] for entity in item['entities'] if entity['name'] == 'ENERGY')
 
     return {
         **item,
@@ -83,7 +89,7 @@ def extract_collision(item):
         return {**item, 'collision': ['ee']}
 
     else:
-        entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'COLLISION']
+        entities = (entity['value'] for entity in item['entities'] if entity['name'] == 'COLLISION')
         return {
             **item,
             'collision': filter_duplicate([get_collision(entity) for entity in entities])
@@ -91,8 +97,8 @@ def extract_collision(item):
 
 
 def extract_production(item):
-    entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'PRODUCTION']
-    productions = [get_production(entity) for entity in entities]
+    entities = (entity['value'] for entity in item['entities'] if entity['name'] == 'PRODUCTION')
+    productions = (get_production(entity) for entity in entities)
 
     return {
         **item,
@@ -110,6 +116,42 @@ def extract_decay_a(item):
 def extract_decay_b(item):
     entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'DECAY_B']
     return {**item, 'decay_b': entities}
+
+
+def extract_decay_particles(item):
+    result = []
+    for text in item['decay_a']:
+        doc = nlp_decay_a(text)
+        result += [{'name': ent.label_, 'value': ent.text} for ent in doc.ents]
+
+    return {
+        **item,
+        'particles': {
+            'original': filter_duplicate(flatten([get_particles(entity['value']) for entity in result if entity['name'] == 'ORIGINAL'])),
+            'intermediate': filter_duplicate(flatten([get_particles(entity['value']) for entity in result if entity['name'] == 'INTERMEDIATE'])),
+            'product': filter_duplicate(flatten([get_particles(entity['value']) for entity in result if entity['name'] == 'PRODUCT']))
+        },
+        'decay': {
+            'original': [entity['value'] for entity in result if entity['name'] == 'ORIGINAL'],
+            'intermediate': [entity['value'] for entity in result if entity['name'] == 'INTERMEDIATE'],
+            'product': [entity['value'] for entity in result if entity['name'] == 'PRODUCT']
+        }
+    }
+
+
+def classify_model(item):
+    text = get_article_text(item['title'], item['abstract'])
+    model = get_paper_model(text)
+
+    if model == 0:
+        model_text = 'bsm'
+    else:
+        model_text = 'sm'
+
+    return {
+        ** item,
+        'model': model_text
+    }
 
 
 def delete_entities(item):
@@ -132,8 +174,8 @@ def update(category: str = None):
 
     processed = [
         process_pipeline(item,
-                         [extract_entities, extract_luminosity, extract_energy, extract_collision, extract_production,
-                          extract_decay_a, extract_decay_b, delete_entities])
+                         [classify_model, extract_entities, extract_luminosity, extract_energy, extract_collision, extract_production,
+                          extract_decay_a, extract_decay_b, extract_decay_particles, delete_entities])
         for item in data
     ]
 
@@ -148,12 +190,19 @@ def update(category: str = None):
 @click.command('connect')
 @with_appcontext
 def connect():
-    for paper in papers.find({}):
-        supersedes = papers.find_one()
-        superseded = papers.find_one({'report_number': paper['superseded']})
+    relevant = papers.find({'$or': [
+        {'supersedes': {'$ne': None, '$exists': True}},
+        {'superseded': {'$ne': None, '$exists': True}}
+    ]})
 
-        papers.update_one(paper, {'$set': {'supersedes_id': supersedes['_id'] if supersedes is not None else None}})
-        papers.update_one(paper, {'$set': {'superseded_id': superseded['_id'] if superseded is not None else None}})
+    for paper in relevant:
+        supersedes = papers.find_one({'cds_id': paper['supersedes']})
+        superseded = papers.find_one({'cds_id': paper['superseded']})
+
+        papers.update_one(paper, {'$set': {
+            'supersedes_id': supersedes['_id'] if supersedes is not None else None,
+            'superseded_id': superseded['_id'] if superseded is not None else None,
+        }})
 
 
 @click.command('erase')

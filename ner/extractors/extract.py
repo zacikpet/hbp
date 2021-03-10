@@ -63,17 +63,67 @@ def get_collision(text: str) -> Optional[str]:
     return None
 
 
-# Returns production mode: vbf, gf
 def get_production(text: str) -> Optional[str]:
-    vbf_keys = ['vector', 'vb']
-    gf_keys = ['gluon', 'gf']
 
-    for vbf_key in vbf_keys:
-        if vbf_key in text:
-            return 'vbf'
 
-    for gf_key in gf_keys:
-        if gf_key in text:
-            return 'gf'
+
 
     return None
+
+
+def get_particles(text: str) -> List[str]:
+    pair = False
+
+    words = [word.lower() for word in text.split(' ') if word != '']
+    joined = ' '.join(words)
+
+    options = {
+        # Bosons
+        'boson': ['boson'],
+        'higgs': ['h boson', 'higgs'],
+        'photon': ['photon', 'γ'],
+        'gluon': ['gluon'],
+        'w_boson': ['w boson'],
+        'z_boson': ['z boson'],
+
+        # Quarks
+        'quark': ['quark'],
+        'top': ['top quark', 't quark', 't-quark', 'top', 'top-quark'],
+        'bottom': ['bottom quark', 'b quark', 'b-quark', 'bottom', 'bottom-quark'],
+        'up': ['up quark', 'u quark', 'u-quark', 'up', 'up-quark'],
+        'down': ['down quark', 'd quark', 'd-quark', 'down', 'down-quark'],
+        'charm': ['charm quark', 'c quark', 'c-quark', 'charm', 'charm-quark'],
+        'strange': ['strange quark', 's quark', 's-quark', 'strange', 'strange-quark'],
+
+        # 1st gen leptons
+        'lepton': ['lepton'],
+        'electron': ['electron'],
+        'muon': ['muon', 'μ'],
+        'tau': ['tau', 'τ'],
+
+        # Neutrinos
+        'neutrino': ['neutrino'],
+        'e_neutrino': ['e neutrino', 'electron neutrino'],
+        'm_neutrino': ['m neutrino', 'muon neutrino'],
+        't_neutrino': ['t neutrino', 'electron neutrino'],
+
+        # Other
+        'invisible': ['invisible'],
+        'jets': ['jets'],
+        'new': ['new'],
+        'gravitino': ['gravitino'],
+        'dark': ['dark', 'dark matter']
+    }
+
+    if 'pair' in words or 'di' in words:
+        pair = True
+
+    result = []
+
+    for particle in options.keys():
+        for option in options[particle]:
+            if option in text.lower():
+                result.append(particle)
+                break
+
+    return result

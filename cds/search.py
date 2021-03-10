@@ -16,7 +16,9 @@ tags = {
     'abstract': '520',
     'date': '269',
     'report_number': '037',
-    'doi': '024'
+    'doi': '024',
+    'cds_id': '001',
+    'files': '856'
 }
 
 
@@ -39,8 +41,10 @@ def search(search_category: str) -> Tuple[List[ElementTree.Element], str]:
             'rg': batch,
             # Start from result
             'jrec': index,
-            # Patterns
-            'p': 'higgs'
+            # Pattern 1
+            'p1': 'higgs',
+            # Pattern 1 location
+            'f1': 'title'
         }
         response = requests.get(url, params)
         collection = ElementTree.fromstring(response.text)
@@ -70,14 +74,16 @@ def extract(search_result: Tuple[List[ElementTree.Element], str]) -> List[Dict]:
     for record in records:
         title = record.find(f"{ns}datafield[@tag='{tags['title']}']//{ns}subfield[@code='a']")
         abstract = record.find(f"{ns}datafield[@tag='{tags['abstract']}']//{ns}subfield[@code='a']")
-        superseded = record.find(f"{ns}datafield[@tag='{tags['superseded']}']//{ns}subfield[@code='r']")
-        supersedes = record.find(f"{ns}datafield[@tag='{tags['supersedes']}']//{ns}subfield[@code='r']")
+        superseded = record.find(f"{ns}datafield[@tag='{tags['superseded']}']//{ns}subfield[@code='w']")
+        supersedes = record.find(f"{ns}datafield[@tag='{tags['supersedes']}']//{ns}subfield[@code='w']")
         report_numbers = record.findall(f"{ns}datafield[@tag='{tags['report_number']}']//{ns}subfield[@code='a']")
         dois = record.findall(f"{ns}datafield[@tag='{tags['doi']}']//{ns}subfield[@code='a']")
-
+        cds_id = record.find(f"{ns}controlfield[@tag='{tags['cds_id']}']")
         date = record.find(f"{ns}datafield[@tag='{tags['date']}']//{ns}subfield[@code='c']")
+        files = record.findall(f"{ns}datafield[@tag='{tags['files']}']//{ns}subfield[@code='u']")
 
         results.append({
+            'cds_id': cds_id.text if cds_id is not None else None,
             'category': search_category,
             'experiment': categories[search_category]['experiment'],
             'type': categories[search_category]['type'],
@@ -87,7 +93,8 @@ def extract(search_result: Tuple[List[ElementTree.Element], str]) -> List[Dict]:
             'superseded': superseded.text if superseded is not None else None,
             'supersedes': supersedes.text if supersedes is not None else None,
             'report_number': [report_number.text for report_number in report_numbers],
-            'doi': [doi.text for doi in dois]
+            'doi': [doi.text for doi in dois],
+            'files': [file.text for file in files if file is not None and '.pdf' in file.text]
         })
 
     return results

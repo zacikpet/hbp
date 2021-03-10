@@ -5,7 +5,7 @@ from spacy.util import minibatch
 
 from converters import json_to_spacy
 
-TRAIN_DATA = json_to_spacy('traindata.json')
+TRAIN_DATA = json_to_spacy('traindata_v1.1.json')
 
 
 def train_spacy(train_data, iterations):
@@ -37,8 +37,6 @@ def train_spacy(train_data, iterations):
 
             print(losses)
     return nlp
-
-
 
 
 if __name__ == '__main__':

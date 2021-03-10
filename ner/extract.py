@@ -1,6 +1,6 @@
 import spacy
 
-model_name = 'decay_a/model'
+model_name = 'model_v1.1'
 
 test_text = input("Enter text:")
 

@@ -6,7 +6,7 @@ from pymongo.collection import Collection
 from pymongo.database import Database
 from pymongo.cursor import Cursor
 
-from commands import crawl, update, connect, search_cds, erase
+from commands import update, connect, search_cds, erase
 from config import db_uri
 from encoders import MongoJSONEncoder, ObjectIdConverter
 
@@ -51,7 +51,6 @@ def get_articles():
     )
 
 
-app.cli.add_command(crawl)
 app.cli.add_command(search_cds)
 app.cli.add_command(update)
 app.cli.add_command(connect)
