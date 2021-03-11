@@ -16,6 +16,7 @@ ner-annotator = "*"
 pandas = "*"
 sklearn = "*"
 nltk = "*"
+gunicorn = "*"
 
 [dev-packages]
 
