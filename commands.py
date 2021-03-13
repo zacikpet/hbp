@@ -154,6 +154,21 @@ def classify_model(item):
     }
 
 
+def classify_stage(item):
+    if item['type'] == 'note':
+        stage = 'preliminary'
+    else:
+        if len(item['doi']) == 1:
+            stage = 'submitted'
+        else:
+            stage = 'published'
+
+    return {
+        ** item,
+        'stage': stage
+    }
+
+
 def delete_entities(item):
     del item['entities']
     return item
@@ -174,8 +189,9 @@ def update(category: str = None):
 
     processed = [
         process_pipeline(item,
-                         [classify_model, extract_entities, extract_luminosity, extract_energy, extract_collision, extract_production,
-                          extract_decay_a, extract_decay_b, extract_decay_particles, delete_entities])
+                         [classify_model, extract_entities, extract_luminosity, extract_energy, extract_collision,
+                          extract_production, extract_decay_a, extract_decay_b, extract_decay_particles,
+                          delete_entities, classify_stage])
         for item in data
     ]
 

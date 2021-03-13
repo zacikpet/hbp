@@ -19,7 +19,7 @@ NEWSPIDER_MODULE = 'hbp.spiders'
 ROBOTSTXT_OBEY = False
 
 
-LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'ERROR'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 32
