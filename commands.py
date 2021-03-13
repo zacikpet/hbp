@@ -3,7 +3,13 @@ import pymongo
 import json
 from bson import json_util
 from flask.cli import with_appcontext
+from scrapy.crawler import CrawlerProcess
+from scrapy.signals import item_passed
+from scrapy.utils.project import get_project_settings
+from scrapy.signalmanager import dispatcher
 from cds.search import get_all, get
+from crawler.hbp.spiders.cdf import CdfScraper
+from crawler.hbp.spiders.d0 import D0Scraper
 from ner import nlp
 from ner.extractors.extract import get_luminosity, get_energy, get_collision, get_production, get_particles
 from ner.converters import get_article_text
@@ -20,16 +26,55 @@ def filter_duplicate(lst: List) -> List:
     return list(set(lst))
 
 
-@click.command('search')
-@click.option('--category', default=None, type=str)
-@with_appcontext
-def search_cds(category: str = None):
+def search_cds(category: str = None) -> List:
     if category is None:
         print('Search all')
         results = get_all()
     else:
         print('Searching ' + category)
         results = get(category)
+
+    return results
+
+
+def crawl(category: str) -> List:
+    spiders = []
+
+    if category == 'd0_papers':
+        spiders.append(D0Scraper)
+    elif category == 'cdf_papers':
+        spiders.append(CdfScraper)
+    elif category is None:
+        spiders.append(D0Scraper)
+        spiders.append(CdfScraper)
+
+    results = []
+
+    process = CrawlerProcess(get_project_settings())
+
+    for spider in spiders:
+        process.crawl(spider)
+
+    def add_result(item):
+        results.append(item)
+
+    dispatcher.connect(add_result, signal=item_passed)
+
+    process.start()
+
+    return results
+
+
+@click.command('search')
+@click.option('--category', default=None, type=str)
+@with_appcontext
+def search(category: str = None):
+    if category == 'd0_papers':
+        results = crawl(category)
+    elif category is not None:
+        results = search_cds(category)
+    else:
+        results = crawl(category) + search_cds(category)
 
     with open('latest.json', 'w') as latest:
         json.dump(results, latest, default=json_util.default)
@@ -52,6 +97,7 @@ def flatten(list_of_lists):
 
 def process_pipeline(item, pipes):
     for pipe in pipes:
+        print(pipe)
         item = pipe(item)
     return item
 
@@ -67,7 +113,10 @@ def extract_entities(item):
 
 
 def extract_luminosity(item):
-    entities = (entity['value'] for entity in item['entities'] if entity['name'] == 'LUMINOSITY')
+    if 'luminosity' in item:
+        entities = [item['luminosity']]
+    else:
+        entities = (entity['value'] for entity in item['entities'] if entity['name'] == 'LUMINOSITY')
 
     return {
         **item,
@@ -158,7 +207,7 @@ def classify_stage(item):
     if item['type'] == 'note':
         stage = 'preliminary'
     else:
-        if len(item['doi']) == 1:
+        if 'doi' in item and len(item['doi']) == 1:
             stage = 'submitted'
         else:
             stage = 'published'
