@@ -1,5 +1,5 @@
 import pymongo
-from flask import Flask, jsonify
+from flask import Flask, abort
 from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
 from pymongo.collection import Collection
@@ -24,7 +24,18 @@ papers: Collection = db.papers
 
 def response(items: Cursor):
     output = items.sort('date', pymongo.DESCENDING)
-    return jsonify(output), 200, {'Content-Type': 'application/json'}
+    return output, 200, {'Content-Type': 'application/json'}
+
+
+@app.route('/papers/<id>', methods=['GET'])
+@cross_origin()
+def get_paper(id):
+    paper = papers.find_one({'id': id})
+
+    if paper is None:
+        abort(404)
+
+    return paper, 200, {'Content-Type': 'application/json'}
 
 
 @app.route('/papers', methods=['GET'])
@@ -32,22 +43,6 @@ def response(items: Cursor):
 def get_papers():
     return response(
         papers.find()
-    )
-
-
-@app.route('/notes', methods=['GET'])
-@cross_origin()
-def get_notes():
-    return response(
-        papers.find({'type': 'note'})
-    )
-
-
-@app.route('/articles', methods=['GET'])
-@cross_origin()
-def get_articles():
-    return response(
-        papers.find({'type': 'paper'})
     )
 
 
