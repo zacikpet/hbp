@@ -1,4 +1,5 @@
 import pymongo
+from bson import ObjectId
 from flask import Flask, abort, jsonify
 from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
@@ -30,7 +31,7 @@ def response(items: Cursor):
 @app.route('/papers/<id>', methods=['GET'])
 @cross_origin()
 def get_paper(id):
-    paper = papers.find_one({'id': id})
+    paper = papers.find_one({'_id': ObjectId(id)})
 
     if paper is None:
         abort(404)
