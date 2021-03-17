@@ -1,6 +1,6 @@
 import pymongo
 from bson import ObjectId
-from flask import Flask, abort, jsonify
+from flask import Flask, abort, jsonify, request
 from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
 from pymongo.collection import Collection
@@ -37,6 +37,30 @@ def get_paper(id):
         abort(404)
 
     return jsonify(paper), 200, {'Content-Type': 'application/json'}
+
+
+@app.route('/papers', methods=['POST'])
+@cross_origin()
+def post_paper():
+    data = request.json
+    result = papers.insert_one(data)
+    return {'_id': result.inserted_id}, 201, {'Content-Type': 'application/json'}
+
+
+@app.route('/papers/<id>', methods=['PATCH'])
+@cross_origin()
+def patch_paper(id):
+    data = request.json
+
+    papers.update_one({'_id': ObjectId(id)}, {'$set': data})
+
+    return data, 200, {'Content-Type': 'application/json'}
+
+
+@app.route('/papers/<id>', methods=['DELETE'])
+def delete_paper(id):
+    papers.delete_one({'_id': ObjectId(id)})
+    return '', 204
 
 
 @app.route('/papers', methods=['GET'])
