@@ -74,9 +74,9 @@ def get_papers():
 @app.route('/mass-limit', methods=['GET'])
 @cross_origin()
 def get_mass_limit():
-    return response(
-        papers.find({'lower_limit': {'$exists': True, '$ne': None, '$gt': 0}})
-    )
+    papers_with_limit = papers.find({'lower_limit': {'$exists': True, '$ne': None, '$gt': 0}})
+    sorted = papers_with_limit.sort('date', pymongo.ASCENDING)
+    return jsonify(sorted), 200, {'Content-Type': 'application/json'}
 
 
 app.cli.add_command(search)
