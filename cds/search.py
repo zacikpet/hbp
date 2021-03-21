@@ -18,7 +18,8 @@ tags = {
     'report_number': '037',
     'doi': '024',
     'cds_id': '001',
-    'files': '856'
+    'files': '856',
+    'timestamp': '005'
 }
 
 
@@ -102,6 +103,14 @@ def extract(search_result: Tuple[List[ElementTree.Element], str]) -> List[Dict]:
 
 def get(search_category: str) -> List[Dict]:
     return extract(search(search_category))
+
+
+def get_many(search_categories: List[str]) -> List[Dict]:
+    results = []
+    for category in search_categories:
+        result = get(category)
+        results += result
+    return results
 
 
 def get_all() -> List[Dict]:

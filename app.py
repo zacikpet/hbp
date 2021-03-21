@@ -7,7 +7,7 @@ from pymongo.collection import Collection
 from pymongo.database import Database
 from pymongo.cursor import Cursor
 
-from commands import update, connect, erase, search
+from commands import classify, connect, erase, search
 from config import db_uri
 from encoders import MongoJSONEncoder, ObjectIdConverter
 
@@ -80,7 +80,7 @@ def get_mass_limit():
 
 
 app.cli.add_command(search)
-app.cli.add_command(update)
+app.cli.add_command(classify)
 app.cli.add_command(connect)
 app.cli.add_command(erase)
 

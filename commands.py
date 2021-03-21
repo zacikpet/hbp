@@ -1,52 +1,27 @@
 import click
 import pymongo
-import json
-from bson import json_util
 from flask.cli import with_appcontext
 from scrapy.crawler import CrawlerProcess
 from scrapy.signals import item_passed
 from scrapy.utils.project import get_project_settings
 from scrapy.signalmanager import dispatcher
-from cds.search import get_all, get
+from cds.search import get_all, get_many
 from crawler.hbp.spiders.cdf import CdfScraper
 from crawler.hbp.spiders.d0 import D0Scraper
-from ner import nlp
-from ner.extractors.extract import get_luminosity, get_energy, get_collision, get_production, get_particles
-from ner.converters import get_article_text
-from ner.decay_a import nlp_decay_a
+
 from config import db_uri
 from typing import List
-from nlp.physics_model.classify import get_paper_model
+
+from pipeline import process_pipeline, classify_model, extract_production, delete_entities, classify_stage, \
+    extract_decay_a, extract_entities, extract_luminosity, extract_decay_b, extract_decay_particles, extract_energy, \
+    extract_collision
 
 mongo = pymongo.MongoClient(db_uri)
 papers: pymongo.collection.Collection = mongo.hbp.papers
 
 
-def filter_duplicate(lst: List) -> List:
-    return list(set(lst))
-
-
-def search_cds(category: str = None) -> List:
-    if category is None:
-        print('Search all')
-        results = get_all()
-    else:
-        print('Searching ' + category)
-        results = get(category)
-
-    return results
-
-
-def crawl(category: str) -> List:
-    spiders = []
-
-    if category == 'd0_papers':
-        spiders.append(D0Scraper)
-    elif category == 'cdf_papers':
-        spiders.append(CdfScraper)
-    elif category is None:
-        spiders.append(D0Scraper)
-        spiders.append(CdfScraper)
+def crawl() -> List:
+    spiders = [D0Scraper, CdfScraper]
 
     results = []
 
@@ -65,196 +40,24 @@ def crawl(category: str) -> List:
     return results
 
 
-@click.command('search')
-@click.option('--category', default=None, type=str)
-@with_appcontext
-def search(category: str = None):
-    if category == 'd0_papers':
-        results = crawl(category)
-    elif category is not None:
-        results = search_cds(category)
-    else:
-        results = crawl(category) + search_cds(category)
-
-    with open('latest.json', 'w') as latest:
-        json.dump(results, latest, default=json_util.default)
-
-    if category is None:
-        papers.delete_many({})
-    else:
-        papers.delete_many({'category': category})
-
-    papers.insert_many(results)
+def classify(article):
+    return process_pipeline(
+        article,
+        [classify_model, extract_entities, extract_luminosity, extract_energy, extract_collision,
+         extract_production, extract_decay_a, extract_decay_b, extract_decay_particles,
+         delete_entities, classify_stage]
+    )
 
 
-def flatten(list_of_lists):
-    result = []
-    for sublist in list_of_lists:
-        for item in sublist:
-            result.append(item)
-    return result
+def process_articles():
+    # Run NLP classifiers and recognizers on all articles in DB
+    print('Classifying articles...')
+    for article in list(papers.find({})):
+        classifiers = classify(article)
+        papers.update_one(article, {'$set': classifiers})
 
-
-def process_pipeline(item, pipes):
-    for pipe in pipes:
-        print(pipe)
-        item = pipe(item)
-    return item
-
-
-def extract_entities(item):
-    text = get_article_text(item['title'], item['abstract'])
-    doc = nlp(text)
-
-    return {
-        **item,
-        'entities': [{'name': ent.label_, 'value': ent.text} for ent in doc.ents]
-    }
-
-
-def extract_luminosity(item):
-    if 'luminosity' in item:
-        entities = [item['luminosity']]
-    else:
-        entities = (entity['value'] for entity in item['entities'] if entity['name'] == 'LUMINOSITY')
-
-    return {
-        **item,
-        'luminosity': filter_duplicate(flatten([get_luminosity(entity) for entity in entities]))
-    }
-
-
-def extract_energy(item):
-    entities = (entity['value'] for entity in item['entities'] if entity['name'] == 'ENERGY')
-
-    return {
-        **item,
-        'energy': filter_duplicate(flatten([get_energy(entity) for entity in entities]))
-    }
-
-
-def extract_collision(item):
-    if item['experiment'] in ['aleph', 'delphi', 'l3', 'opal']:
-        return {**item, 'collision': ['ee']}
-
-    else:
-        entities = (entity['value'] for entity in item['entities'] if entity['name'] == 'COLLISION')
-        return {
-            **item,
-            'collision': filter_duplicate([get_collision(entity) for entity in entities])
-        }
-
-
-def extract_production(item):
-    entities = (entity['value'] for entity in item['entities'] if entity['name'] == 'PRODUCTION')
-    productions = (get_production(entity) for entity in entities)
-
-    return {
-        **item,
-        'production': filter_duplicate(
-            [prod for prod in productions if prod is not None]
-        )
-    }
-
-
-def extract_decay_a(item):
-    entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'DECAY_A']
-    return {**item, 'decay_a': entities}
-
-
-def extract_decay_b(item):
-    entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'DECAY_B']
-    return {**item, 'decay_b': entities}
-
-
-def extract_decay_particles(item):
-    result = []
-    for text in item['decay_a']:
-        doc = nlp_decay_a(text)
-        result += [{'name': ent.label_, 'value': ent.text} for ent in doc.ents]
-
-    return {
-        **item,
-        'particles': {
-            'original': filter_duplicate(flatten([get_particles(entity['value']) for entity in result if entity['name'] == 'ORIGINAL'])),
-            'intermediate': filter_duplicate(flatten([get_particles(entity['value']) for entity in result if entity['name'] == 'INTERMEDIATE'])),
-            'product': filter_duplicate(flatten([get_particles(entity['value']) for entity in result if entity['name'] == 'PRODUCT']))
-        },
-        'decay': {
-            'original': [entity['value'] for entity in result if entity['name'] == 'ORIGINAL'],
-            'intermediate': [entity['value'] for entity in result if entity['name'] == 'INTERMEDIATE'],
-            'product': [entity['value'] for entity in result if entity['name'] == 'PRODUCT']
-        }
-    }
-
-
-def classify_model(item):
-    text = get_article_text(item['title'], item['abstract'])
-    model = get_paper_model(text)
-
-    if model == 0:
-        model_text = 'bsm'
-    else:
-        model_text = 'sm'
-
-    return {
-        ** item,
-        'model': model_text
-    }
-
-
-def classify_stage(item):
-    if item['type'] == 'note':
-        stage = 'preliminary'
-    else:
-        if 'doi' in item and len(item['doi']) == 1:
-            stage = 'submitted'
-        else:
-            stage = 'published'
-
-    return {
-        ** item,
-        'stage': stage
-    }
-
-
-def delete_entities(item):
-    del item['entities']
-    return item
-
-
-@click.command('update')
-@click.option('--category', default=None)
-@with_appcontext
-def update(category: str = None):
-    if category is None:
-        print('Updating all')
-        queryset = papers.find({})
-    else:
-        print('Updating ' + category)
-        queryset = papers.find({'category': category})
-
-    data = list(queryset)
-
-    processed = [
-        process_pipeline(item,
-                         [classify_model, extract_entities, extract_luminosity, extract_energy, extract_collision,
-                          extract_production, extract_decay_a, extract_decay_b, extract_decay_particles,
-                          delete_entities, classify_stage])
-        for item in data
-    ]
-
-    if category is None:
-        papers.delete_many({})
-    else:
-        papers.delete_many({'category': category})
-
-    papers.insert_many(processed)
-
-
-@click.command('connect')
-@with_appcontext
-def connect():
+    # Connect relevant articles
+    print('Connecting relevant articles...')
     relevant = papers.find({'$or': [
         {'supersedes': {'$ne': None, '$exists': True}},
         {'superseded': {'$ne': None, '$exists': True}}
@@ -270,7 +73,40 @@ def connect():
         }})
 
 
+@click.command('fill')
+@with_appcontext
+def fill():
+    if papers.count_documents({}) > 0:
+        print('Database must be empty.')
+        return
+
+    print('Filling database...')
+    articles = crawl() + get_all()
+
+    papers.insert_many(articles)
+
+    process_articles()
+
+    print('Database filled.')
+
+
+@click.command('update')
+@with_appcontext
+def update():
+    # Search for new ATLAS and CMS papers and insert into DB (upsert)
+    # Update existing ones
+    print('Searching for new articles...')
+    for article in get_many(['atlas_papers', 'atlas_notes', 'cms_papers', 'cms_notes']):
+        papers.update_one({'cds_id': article['cds_id']}, {'$set': article}, upsert=True)
+
+    process_articles()
+
+    print('Database updated.')
+
+
 @click.command('erase')
 @with_appcontext
 def erase():
+    print('Erasing database...')
     papers.delete_many({})
+    print('Database erased.')
