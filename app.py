@@ -7,7 +7,7 @@ from pymongo.collection import Collection
 from pymongo.database import Database
 from pymongo.cursor import Cursor
 
-from commands import classify, connect, erase, search
+from commands import fill, erase, update, classify, connect
 from config import db_uri
 from encoders import MongoJSONEncoder, ObjectIdConverter
 
@@ -75,14 +75,15 @@ def get_papers():
 @cross_origin()
 def get_mass_limit():
     papers_with_limit = papers.find({'lower_limit': {'$exists': True, '$ne': None, '$gt': 0}})
-    sorted = papers_with_limit.sort('date', pymongo.ASCENDING)
-    return jsonify(sorted), 200, {'Content-Type': 'application/json'}
+    sorted_papers = papers_with_limit.sort('date', pymongo.ASCENDING)
+    return jsonify(sorted_papers), 200, {'Content-Type': 'application/json'}
 
 
-app.cli.add_command(search)
+app.cli.add_command(fill)
+app.cli.add_command(update)
 app.cli.add_command(classify)
-app.cli.add_command(connect)
 app.cli.add_command(erase)
+app.cli.add_command(connect)
 
 if __name__ == '__main__':
     app.run()

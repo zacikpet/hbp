@@ -148,3 +148,12 @@ def classify_stage(item):
 def delete_entities(item):
     del item['entities']
     return item
+
+
+def pipeline(article):
+    return process_pipeline(
+        article,
+        [classify_model, extract_entities, extract_luminosity, extract_energy, extract_collision,
+         extract_production, extract_decay_a, extract_decay_b, extract_decay_particles,
+         delete_entities, classify_stage]
+    )

@@ -1,62 +1,19 @@
 import click
 import pymongo
 from flask.cli import with_appcontext
-from scrapy.crawler import CrawlerProcess
-from scrapy.signals import item_passed
-from scrapy.utils.project import get_project_settings
-from scrapy.signalmanager import dispatcher
+
 from cds.search import get_all, get_many
-from crawler.hbp.spiders.cdf import CdfScraper
-from crawler.hbp.spiders.d0 import D0Scraper
-
 from config import db_uri
-from typing import List
-
-from pipeline import process_pipeline, classify_model, extract_production, delete_entities, classify_stage, \
-    extract_decay_a, extract_entities, extract_luminosity, extract_decay_b, extract_decay_particles, extract_energy, \
-    extract_collision
+from crawler.crawl import crawl
+from pipeline import pipeline
 
 mongo = pymongo.MongoClient(db_uri)
 papers: pymongo.collection.Collection = mongo.hbp.papers
 
 
-def crawl() -> List:
-    spiders = [D0Scraper, CdfScraper]
-
-    results = []
-
-    process = CrawlerProcess(get_project_settings())
-
-    for spider in spiders:
-        process.crawl(spider)
-
-    def add_result(item):
-        results.append(item)
-
-    dispatcher.connect(add_result, signal=item_passed)
-
-    process.start()
-
-    return results
-
-
-def classify(article):
-    return process_pipeline(
-        article,
-        [classify_model, extract_entities, extract_luminosity, extract_energy, extract_collision,
-         extract_production, extract_decay_a, extract_decay_b, extract_decay_particles,
-         delete_entities, classify_stage]
-    )
-
-
-def process_articles():
-    # Run NLP classifiers and recognizers on all articles in DB
-    print('Classifying articles...')
-    for article in list(papers.find({})):
-        classifiers = classify(article)
-        papers.update_one(article, {'$set': classifiers})
-
-    # Connect relevant articles
+@click.command('connect')
+@with_appcontext
+def connect():
     print('Connecting relevant articles...')
     relevant = papers.find({'$or': [
         {'supersedes': {'$ne': None, '$exists': True}},
@@ -73,6 +30,16 @@ def process_articles():
         }})
 
 
+@click.command('classify')
+@with_appcontext
+def classify():
+    # Run NLP classifiers and recognizers on all articles in DB
+    print('Classifying articles...')
+    for article in list(papers.find({})):
+        classifiers = pipeline(article)
+        papers.update_one(article, {'$set': classifiers})
+
+
 @click.command('fill')
 @with_appcontext
 def fill():
@@ -85,7 +52,8 @@ def fill():
 
     papers.insert_many(articles)
 
-    process_articles()
+    classify()
+    connect()
 
     print('Database filled.')
 
@@ -99,7 +67,8 @@ def update():
     for article in get_many(['atlas_papers', 'atlas_notes', 'cms_papers', 'cms_notes']):
         papers.update_one({'cds_id': article['cds_id']}, {'$set': article}, upsert=True)
 
-    process_articles()
+    classify()
+    connect()
 
     print('Database updated.')
 
