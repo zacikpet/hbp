@@ -1,3 +1,5 @@
+import os
+
 import pymongo
 from bson import ObjectId
 from flask import Flask, abort, jsonify, request
@@ -6,9 +8,8 @@ from flask_pymongo import PyMongo
 from pymongo.collection import Collection
 from pymongo.database import Database
 from pymongo.cursor import Cursor
-
+from dotenv import load_dotenv
 from commands import fill, erase, update, classify, connect
-from config import db_uri
 from encoders import MongoJSONEncoder, ObjectIdConverter
 
 
@@ -17,7 +18,9 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.json_encoder = MongoJSONEncoder
 app.url_map.converters['objectid'] = ObjectIdConverter
+load_dotenv()
 
+db_uri = os.getenv('DB_URI')
 db: Database = PyMongo(app, db_uri).db
 
 papers: Collection = db.papers

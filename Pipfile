@@ -17,6 +17,7 @@ pandas = "*"
 sklearn = "*"
 nltk = "*"
 gunicorn = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

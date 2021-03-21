@@ -1,11 +1,15 @@
+import os
+
 import click
 import pymongo
 from flask.cli import with_appcontext
-
+from dotenv import load_dotenv
 from cds.search import get_all, get_many
-from config import db_uri
 from crawler.crawl import crawl
 from pipeline import pipeline
+
+load_dotenv()
+db_uri = os.getenv('DB_URI')
 
 mongo = pymongo.MongoClient(db_uri)
 papers: pymongo.collection.Collection = mongo.hbp.papers
