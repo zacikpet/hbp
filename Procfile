@@ -1,2 +1,2 @@
 web: gunicorn wsgi:app
-worker: pipenv run flask update
+clock: pipenv run python clock.py

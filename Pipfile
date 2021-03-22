@@ -18,6 +18,7 @@ sklearn = "*"
 nltk = "*"
 gunicorn = "*"
 python-dotenv = "*"
+apscheduler = "*"
 
 [dev-packages]
 
