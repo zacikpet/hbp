@@ -22,7 +22,7 @@ app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
 jwt = JWTManager(app)
 
-cors = CORS(app, supports_credentials=True, origins=['localhost:3000', 'higgsbosonportal.herokuapp.com'])
+CORS(app, supports_credentials=True, origins=['localhost:3000', 'higgsbosonportal.herokuapp.com'])
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.json_encoder = MongoJSONEncoder
 app.url_map.converters['objectid'] = ObjectIdConverter
@@ -67,6 +67,7 @@ def verification_required():
 
 
 @app.route('/register', methods=['POST'])
+@cross_origin(supports_credentials=True, origins=['localhost:3000', 'higgsbosonportal.herokuapp.com'])
 def register():
     if 'email' not in request.json or 'password' not in request.json:
         return jsonify(message='Missing email or password'), 400
@@ -87,6 +88,7 @@ def register():
 
 
 @app.route('/login', methods=['POST'])
+@cross_origin(supports_credentials=True, origins=['localhost:3000', 'higgsbosonportal.herokuapp.com'])
 def login():
     if 'email' not in request.json or 'password' not in request.json:
         return jsonify(message='Missing email or password'), 400
@@ -110,6 +112,7 @@ def login():
 
 
 @app.route('/logout', methods=['POST'])
+@cross_origin(supports_credentials=True, origins=['localhost:3000', 'higgsbosonportal.herokuapp.com'])
 def logout():
     response = jsonify(message="Logout successful.")
     unset_jwt_cookies(response)
@@ -117,12 +120,14 @@ def logout():
 
 
 @app.route('/verify-auth', methods=['GET'])
+@cross_origin(supports_credentials=True, origins=['localhost:3000', 'higgsbosonportal.herokuapp.com'])
 @jwt_required()
 def verify_auth():
     return jsonify(message='Auth verified'), 200
 
 
 @app.route('/users/current', methods=['GET'])
+@cross_origin(supports_credentials=True, origins=['localhost:3000', 'higgsbosonportal.herokuapp.com'])
 @jwt_required()
 def get_current_user():
     email = get_jwt_identity()
@@ -137,6 +142,7 @@ def get_current_user():
 
 
 @app.route('/users/delete', methods=['DELETE'])
+@cross_origin(supports_credentials=True, origins=['localhost:3000', 'higgsbosonportal.herokuapp.com'])
 @jwt_required()
 def delete_user():
     email = get_jwt_identity()
