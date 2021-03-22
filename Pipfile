@@ -18,6 +18,7 @@ nltk = "*"
 dnspython = "*"
 flask-jwt-extended = "*"
 ner-annotator = "*"
+bcrypt = "*"
 
 [dev-packages]
 

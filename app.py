@@ -1,7 +1,7 @@
 import os
 from datetime import timedelta, datetime, timezone
 from functools import wraps
-
+import bcrypt
 import pymongo
 from bson import ObjectId
 from flask import Flask, abort, jsonify, request
@@ -78,7 +78,9 @@ def register():
     if users.find_one({'email': email}):
         return jsonify(message='User already exists'), 409
     else:
-        user = dict(email=email, password=password, verified=False)
+        salt = bcrypt.gensalt()
+        password_hash = bcrypt.hashpw(password.encode(), salt)
+        user = dict(email=email, password=password_hash, verified=False)
         users.insert_one(user)
         return jsonify(message='Account created.'), 201
 
@@ -96,7 +98,7 @@ def login():
     if user:
         access_token = create_access_token(identity=email)
 
-        if password == user['password']:
+        if bcrypt.hashpw(password.encode(), user['password']) == user['password']:
             response = jsonify(message="Login Successful", access_token=access_token)
             set_access_cookies(response, access_token)
             return response, 200
