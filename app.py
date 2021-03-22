@@ -4,7 +4,7 @@ from functools import wraps
 import bcrypt
 import pymongo
 from bson import ObjectId
-from flask import Flask, abort, jsonify, request
+from flask import Flask, abort, jsonify, request, make_response
 from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
 from pymongo.collection import Collection
@@ -87,28 +87,45 @@ def register():
         return jsonify(message='Account created.'), 201
 
 
+def _build_cors_preflight_response():
+    response = make_response()
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add('Access-Control-Allow-Headers', "*")
+    response.headers.add('Access-Control-Allow-Methods', "*")
+    return response
+
+
+def _corsify_actual_response(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
+
 @app.route('/login', methods=['POST'])
-@cross_origin(supports_credentials=True, origins=['localhost:3000', 'higgsbosonportal.herokuapp.com'])
 def login():
-    if 'email' not in request.json or 'password' not in request.json:
-        return jsonify(message='Missing email or password'), 400
-
-    email = request.json['email']
-    password = request.json['password']
-
-    user = users.find_one({'email': email})
-
-    if user:
-        access_token = create_access_token(identity=email)
-
-        if bcrypt.hashpw(password.encode(), user['password']) == user['password']:
-            response = jsonify(message="Login Successful", access_token=access_token)
-            set_access_cookies(response, access_token)
-            return response, 200
-        else:
-            return jsonify(message="Invalid password"), 404
+    if request.method == 'OPTIONS':
+        return _build_cors_preflight_response()
     else:
-        return jsonify(message='This user does not exist.'), 404
+        if 'email' not in request.json or 'password' not in request.json:
+            return jsonify(message='Missing email or password'), 400
+
+        email = request.json['email']
+        password = request.json['password']
+
+        user = users.find_one({'email': email})
+
+        if user:
+            access_token = create_access_token(identity=email)
+
+            if bcrypt.hashpw(password.encode(), user['password']) == user['password']:
+                response = jsonify(message="Login Successful", access_token=access_token)
+                set_access_cookies(response, access_token)
+                # return response, 200
+            else:
+                response = jsonify(message="Invalid password"), 404
+        else:
+            response = jsonify(message='This user does not exist.'), 404
+
+        return _corsify_actual_response(response)
 
 
 @app.route('/logout', methods=['POST'])
