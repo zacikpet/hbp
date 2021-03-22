@@ -14,7 +14,6 @@ from flask_jwt_extended import JWTManager, jwt_required, create_access_token, ge
     set_access_cookies, unset_jwt_cookies
 from commands import connect_command, fill_command, update_command, erase_command, classify_command, stats_command
 from encoders import MongoJSONEncoder, ObjectIdConverter
-from service import update, stats
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
@@ -72,6 +71,8 @@ def register():
     if 'email' not in request.json or 'password' not in request.json:
         return jsonify(message='Missing email or password'), 400
 
+    firstname = request.json['firstname']
+    lastname = request.json['lastname']
     email = request.json['email']
     password = request.json['password']
 
@@ -80,7 +81,7 @@ def register():
     else:
         salt = bcrypt.gensalt()
         password_hash = bcrypt.hashpw(password.encode(), salt)
-        user = dict(email=email, password=password_hash, verified=False)
+        user = dict(firstname=firstname, lastname=lastname, email=email, password=password_hash, verified=False)
         users.insert_one(user)
         return jsonify(message='Account created.'), 201
 
@@ -117,7 +118,6 @@ def logout():
 
 @app.route('/users/current', methods=['GET'])
 @jwt_required()
-@verification_required()
 def get_current_user():
     email = get_jwt_identity()
 
@@ -159,6 +159,8 @@ def get_paper(id):
 
 @app.route('/papers/<id>', methods=['PATCH'])
 @cross_origin()
+@jwt_required()
+@verification_required()
 def patch_paper(id):
     data = request.json
 
@@ -168,6 +170,9 @@ def patch_paper(id):
 
 
 @app.route('/papers/<id>', methods=['DELETE'])
+@cross_origin()
+@jwt_required()
+@verification_required()
 def delete_paper(id):
     papers.delete_one({'_id': ObjectId(id)})
     return '', 204
@@ -187,20 +192,6 @@ def get_mass_limit():
     papers_with_limit = papers.find({'lower_limit': {'$exists': True, '$ne': None, '$gt': 0}})
     sorted_papers = papers_with_limit.sort('date', pymongo.ASCENDING)
     return jsonify(sorted_papers), 200, {'Content-Type': 'application/json'}
-
-
-@app.route('/update', methods=['POST'])
-@cross_origin()
-def update_view():
-    result = update()
-    return {'exit_code': result}, 204
-
-
-@app.route('/stats', methods=['GET'])
-@cross_origin()
-def stats_view():
-    result = stats()
-    return jsonify(result), 200, {'Content-Type': 'application/json'}
 
 
 app.cli.add_command(fill_command)
