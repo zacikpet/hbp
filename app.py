@@ -4,7 +4,7 @@ from functools import wraps
 import bcrypt
 import pymongo
 from bson import ObjectId
-from flask import Flask, abort, jsonify, request, make_response
+from flask import Flask, abort, jsonify, request
 from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
 from pymongo.collection import Collection
@@ -22,7 +22,7 @@ app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
 jwt = JWTManager(app)
 
-CORS(app, supports_credentials=True, origins=['localhost:3000', 'higgsbosonportal.herokuapp.com'])
+CORS(app, supports_credentials=True)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.json_encoder = MongoJSONEncoder
 app.url_map.converters['objectid'] = ObjectIdConverter
@@ -67,7 +67,7 @@ def verification_required():
 
 
 @app.route('/register', methods=['POST'])
-@cross_origin(supports_credentials=True, origins=['localhost:3000', 'higgsbosonportal.herokuapp.com'])
+@cross_origin(supports_credentials=True)
 def register():
     if 'email' not in request.json or 'password' not in request.json:
         return jsonify(message='Missing email or password'), 400
@@ -87,49 +87,31 @@ def register():
         return jsonify(message='Account created.'), 201
 
 
-def _build_cors_preflight_response():
-    response = make_response()
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add('Access-Control-Allow-Headers', "*")
-    response.headers.add('Access-Control-Allow-Methods', "*")
-    return response
-
-
-def _corsify_actual_response(response):
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    return response
-
-
 @app.route('/login', methods=['POST'])
 def login():
-    if request.method == 'OPTIONS':
-        return _build_cors_preflight_response()
-    else:
-        if 'email' not in request.json or 'password' not in request.json:
-            return jsonify(message='Missing email or password'), 400
+    if 'email' not in request.json or 'password' not in request.json:
+        return jsonify(message='Missing email or password'), 400
 
-        email = request.json['email']
-        password = request.json['password']
+    email = request.json['email']
+    password = request.json['password']
 
-        user = users.find_one({'email': email})
+    user = users.find_one({'email': email})
 
-        if user:
-            access_token = create_access_token(identity=email)
+    if user:
+        access_token = create_access_token(identity=email)
 
-            if bcrypt.hashpw(password.encode(), user['password']) == user['password']:
-                response = jsonify(message="Login Successful", access_token=access_token)
-                set_access_cookies(response, access_token)
-                # return response, 200
-            else:
-                response = jsonify(message="Invalid password"), 404
+        if bcrypt.hashpw(password.encode(), user['password']) == user['password']:
+            response = jsonify(message="Login Successful", access_token=access_token)
+            set_access_cookies(response, access_token)
+            return response, 200
         else:
-            response = jsonify(message='This user does not exist.'), 404
-
-        return _corsify_actual_response(response)
+            return jsonify(message="Invalid password"), 404
+    else:
+        return jsonify(message='This user does not exist.'), 404
 
 
 @app.route('/logout', methods=['POST'])
-@cross_origin(supports_credentials=True, origins=['localhost:3000', 'higgsbosonportal.herokuapp.com'])
+@cross_origin(supports_credentials=True)
 def logout():
     response = jsonify(message="Logout successful.")
     unset_jwt_cookies(response)
@@ -137,14 +119,14 @@ def logout():
 
 
 @app.route('/verify-auth', methods=['GET'])
-@cross_origin(supports_credentials=True, origins=['localhost:3000', 'higgsbosonportal.herokuapp.com'])
+@cross_origin(supports_credentials=True)
 @jwt_required()
 def verify_auth():
     return jsonify(message='Auth verified'), 200
 
 
 @app.route('/users/current', methods=['GET'])
-@cross_origin(supports_credentials=True, origins=['localhost:3000', 'higgsbosonportal.herokuapp.com'])
+@cross_origin(supports_credentials=True)
 @jwt_required()
 def get_current_user():
     email = get_jwt_identity()
@@ -159,7 +141,7 @@ def get_current_user():
 
 
 @app.route('/users/delete', methods=['DELETE'])
-@cross_origin(supports_credentials=True, origins=['localhost:3000', 'higgsbosonportal.herokuapp.com'])
+@cross_origin(supports_credentials=True)
 @jwt_required()
 def delete_user():
     email = get_jwt_identity()
@@ -204,7 +186,7 @@ def delete_paper(id):
 
 
 @app.route('/papers', methods=['GET'])
-@cross_origin()
+@cross_origin(supports_credentials=True)
 def get_papers():
     items = papers.find()
     output = items.sort('date', pymongo.DESCENDING)
