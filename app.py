@@ -1,5 +1,5 @@
 import os
-
+import secrets
 import pymongo
 from bson import ObjectId
 from flask import Flask, abort, jsonify, request
@@ -15,6 +15,9 @@ from encoders import MongoJSONEncoder, ObjectIdConverter
 from service import update, stats
 
 app = Flask(__name__)
+
+app.secret_key = secrets.token_urlsafe(16)
+admin_password = 'admin'
 
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -33,6 +36,14 @@ def response(items: Cursor):
     return jsonify(output), 200, {'Content-Type': 'application/json'}
 
 
+@app.route('/auth', methods=['POST'])
+def auth():
+    if 'password' in request.json and request.json['password'] == admin_password:
+        return {'token': app.secret_key}
+    else:
+        return '', 401
+
+
 @app.route('/papers/<id>', methods=['GET'])
 @cross_origin()
 def get_paper(id):
@@ -42,14 +53,6 @@ def get_paper(id):
         abort(404)
 
     return jsonify(paper), 200, {'Content-Type': 'application/json'}
-
-
-@app.route('/papers', methods=['POST'])
-@cross_origin()
-def post_paper():
-    data = request.json
-    result = papers.insert_one(data)
-    return {'_id': result.inserted_id}, 201, {'Content-Type': 'application/json'}
 
 
 @app.route('/papers/<id>', methods=['PATCH'])

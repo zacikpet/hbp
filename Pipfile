@@ -4,22 +4,18 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-Flask = "*"
-Flask-PyMongo = "*"
-dnspython = "*"
-Scrapy = "*"
+flask = "*"
+pymongo = "*"
+flask-cors = "*"
+flask-pymongo = "*"
+python-dotenv = "*"
+dateparser = "*"
+scrapy = "*"
 spacy = "*"
 pylatexenc = "*"
-Flask-Cors = "*"
-dateparser = "*"
-ner-annotator = "*"
-pandas = "*"
 sklearn = "*"
 nltk = "*"
-gunicorn = "*"
-python-dotenv = "*"
-apscheduler = "*"
-rq = "*"
+dnspython = "*"
 
 [dev-packages]
 
