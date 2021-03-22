@@ -16,6 +16,8 @@ pylatexenc = "*"
 sklearn = "*"
 nltk = "*"
 dnspython = "*"
+flask-jwt-extended = "*"
+ner-annotator = "*"
 
 [dev-packages]
 

@@ -1,5 +1,7 @@
 import os
-import secrets
+from datetime import timedelta, datetime, timezone
+from functools import wraps
+
 import pymongo
 from bson import ObjectId
 from flask import Flask, abort, jsonify, request
@@ -7,41 +9,139 @@ from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
 from pymongo.collection import Collection
 from pymongo.database import Database
-from pymongo.cursor import Cursor
 from dotenv import load_dotenv
-
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity, get_jwt, \
+    set_access_cookies, unset_jwt_cookies
 from commands import connect_command, fill_command, update_command, erase_command, classify_command, stats_command
 from encoders import MongoJSONEncoder, ObjectIdConverter
 from service import update, stats
 
 app = Flask(__name__)
-
-app.secret_key = secrets.token_urlsafe(16)
-admin_password = 'admin'
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+app.config['JWT_COOKIE_SECURE'] = False
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
+jwt = JWTManager(app)
 
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.json_encoder = MongoJSONEncoder
 app.url_map.converters['objectid'] = ObjectIdConverter
-load_dotenv()
 
+load_dotenv()
 db_uri = os.getenv('DB_URI')
 db: Database = PyMongo(app, db_uri).db
 
 papers: Collection = db.papers
+users: Collection = db.users
 
 
-def response(items: Cursor):
-    output = items.sort('date', pymongo.DESCENDING)
-    return jsonify(output), 200, {'Content-Type': 'application/json'}
+@app.after_request
+def refresh_expiring_jwt(response):
+    try:
+        exp_timestamp = get_jwt()['exp']
+        now = datetime.now(timezone.utc)
+        target_timestamp = datetime.timestamp(now + timedelta(minutes=15))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            set_access_cookies(response, access_token)
+        return response
+    except (RuntimeError, KeyError):
+        return response
 
 
-@app.route('/auth', methods=['POST'])
-def auth():
-    if 'password' in request.json and request.json['password'] == admin_password:
-        return {'token': app.secret_key}
+def verification_required():
+    def wrapper(fn):
+        @wraps(fn)
+        def decorator(*args, **kwargs):
+            email = get_jwt_identity()
+            user = users.find_one({'email': email})
+
+            if not user['verified']:
+                return jsonify(message='Your account is not yet verified', code='not-verified'), 401
+            else:
+                return fn(*args, **kwargs)
+
+        return decorator
+
+    return wrapper
+
+
+@app.route('/register', methods=['POST'])
+def register():
+    if 'email' not in request.json or 'password' not in request.json:
+        return jsonify(message='Missing email or password'), 400
+
+    email = request.json['email']
+    password = request.json['password']
+
+    if users.find_one({'email': email}):
+        return jsonify(message='User already exists'), 409
     else:
-        return '', 401
+        user = dict(email=email, password=password, verified=False)
+        users.insert_one(user)
+        return jsonify(message='Account created.'), 201
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    if 'email' not in request.json or 'password' not in request.json:
+        return jsonify(message='Missing email or password'), 400
+
+    email = request.json['email']
+    password = request.json['password']
+
+    user = users.find_one({'email': email})
+
+    if user:
+        access_token = create_access_token(identity=email)
+
+        if password == user['password']:
+            response = jsonify(message="Login Successful", access_token=access_token)
+            set_access_cookies(response, access_token)
+            return response, 200
+        else:
+            return jsonify(message="Invalid password"), 404
+    else:
+        return jsonify(message='This user does not exist.'), 404
+
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    response = jsonify(message="Logout successful.")
+    unset_jwt_cookies(response)
+    return response
+
+
+@app.route('/users/current', methods=['GET'])
+@jwt_required()
+@verification_required()
+def get_current_user():
+    email = get_jwt_identity()
+
+    user = users.find_one({'email': email})
+
+    if user:
+        return jsonify(user), 200
+    else:
+        return jsonify(message='No current user'), 404
+
+
+@app.route('/users/<id>', methods=['DELETE'])
+@jwt_required()
+def delete_user(id):
+    email = get_jwt_identity()
+    user = users.find_one({'email': email})
+
+    if not user['verified']:
+        return jsonify(message='Your account is not yet verified'), 401
+
+    deleted_count = users.delete_one({'_id': ObjectId(id)})
+
+    if deleted_count == 0:
+        return jsonify(message='User does not exist.'), 404
+    else:
+        return jsonify(message='Successfully deleted user.'), 200
 
 
 @app.route('/papers/<id>', methods=['GET'])
@@ -74,9 +174,9 @@ def delete_paper(id):
 @app.route('/papers', methods=['GET'])
 @cross_origin()
 def get_papers():
-    return response(
-        papers.find()
-    )
+    items = papers.find()
+    output = items.sort('date', pymongo.DESCENDING)
+    return jsonify(output), 200, {'Content-Type': 'application/json'}
 
 
 @app.route('/mass-limit', methods=['GET'])
