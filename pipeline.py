@@ -21,7 +21,6 @@ def flatten(list_of_lists):
 
 def process_pipeline(item, pipes):
     for pipe in pipes:
-        print(pipe)
         item = pipe(item)
     return item
 
@@ -37,10 +36,12 @@ def extract_entities(item):
 
 
 def extract_luminosity(item):
+    print(item)
+
     if 'luminosity' in item:
-        entities = [item['luminosity']]
+        return item
     else:
-        entities = (entity['value'] for entity in item['entities'] if entity['name'] == 'LUMINOSITY')
+        entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'LUMINOSITY']
 
     return {
         **item,

@@ -9,11 +9,14 @@ from pymongo.collection import Collection
 from pymongo.database import Database
 from pymongo.cursor import Cursor
 from dotenv import load_dotenv
-from commands import fill, erase, update, classify, connect
-from encoders import MongoJSONEncoder, ObjectIdConverter
 
+from commands import connect_command, fill_command, update_command, erase_command, classify_command, stats_command
+from encoders import MongoJSONEncoder, ObjectIdConverter
+from service import update
 
 app = Flask(__name__)
+
+
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.json_encoder = MongoJSONEncoder
@@ -82,11 +85,20 @@ def get_mass_limit():
     return jsonify(sorted_papers), 200, {'Content-Type': 'application/json'}
 
 
-app.cli.add_command(fill)
-app.cli.add_command(update)
-app.cli.add_command(classify)
-app.cli.add_command(erase)
-app.cli.add_command(connect)
+@app.route('/update', methods=['POST'])
+@cross_origin()
+def update_view():
+    result = update()
+    return {'exit_code': result}, 204
+
+
+app.cli.add_command(fill_command)
+app.cli.add_command(update_command)
+app.cli.add_command(erase_command)
+app.cli.add_command(classify_command)
+app.cli.add_command(stats_command)
+app.cli.add_command(connect_command)
+
 
 if __name__ == '__main__':
     app.run()

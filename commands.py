@@ -1,85 +1,48 @@
-import os
-
 import click
-import pymongo
 from flask.cli import with_appcontext
-from dotenv import load_dotenv
-from cds.search import get_all, get_many
-from crawler.crawl import crawl
-from pipeline import pipeline
+from service import stats, update, fill, erase, classify, connect
 
-load_dotenv()
-db_uri = os.getenv('DB_URI')
 
-mongo = pymongo.MongoClient(db_uri)
-papers: pymongo.collection.Collection = mongo.hbp.papers
+@click.command('stats')
+@with_appcontext
+def stats_command():
+    statistics = stats()
+    print(statistics)
 
 
 @click.command('connect')
 @with_appcontext
-def connect():
+def connect_command():
     print('Connecting relevant articles...')
-    relevant = papers.find({'$or': [
-        {'supersedes': {'$ne': None, '$exists': True}},
-        {'superseded': {'$ne': None, '$exists': True}}
-    ]})
-
-    for paper in relevant:
-        supersedes = papers.find_one({'cds_id': paper['supersedes']})
-        superseded = papers.find_one({'cds_id': paper['superseded']})
-
-        papers.update_one(paper, {'$set': {
-            'supersedes_id': supersedes['_id'] if supersedes is not None else None,
-            'superseded_id': superseded['_id'] if superseded is not None else None,
-        }})
+    connect()
 
 
 @click.command('classify')
 @with_appcontext
-def classify():
+def classify_command():
     # Run NLP classifiers and recognizers on all articles in DB
     print('Classifying articles...')
-    for article in list(papers.find({})):
-        classifiers = pipeline(article)
-        papers.update_one(article, {'$set': classifiers})
+    classify()
 
 
 @click.command('fill')
 @with_appcontext
-def fill():
-    if papers.count_documents({}) > 0:
-        print('Database must be empty.')
-        return
-
-    print('Filling database...')
-    articles = crawl() + get_all()
-
-    papers.insert_many(articles)
-
-    classify()
-    connect()
+def fill_command():
+    fill()
 
     print('Database filled.')
 
 
 @click.command('update')
 @with_appcontext
-def update():
-    # Search for new ATLAS and CMS papers and insert into DB (upsert)
-    # Update existing ones
-    print('Searching for new articles...')
-    for article in get_many(['atlas_papers', 'atlas_notes', 'cms_papers', 'cms_notes']):
-        papers.update_one({'cds_id': article['cds_id']}, {'$set': article}, upsert=True)
-
-    classify()
-    connect()
-
+def update_command():
+    update()
     print('Database updated.')
 
 
 @click.command('erase')
 @with_appcontext
-def erase():
+def erase_command():
     print('Erasing database...')
-    papers.delete_many({})
+    erase()
     print('Database erased.')

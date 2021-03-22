@@ -37,7 +37,7 @@ class D0Scraper(scrapy.Spider):
             {
                 'title': ''.join(ordinal.xpath('(./following-sibling::a)[1]//text()').getall()),
                 'link': ordinal.xpath('following-sibling::a/@href').get(),
-                'luminosity': ordinal.xpath('following-sibling::font[@color="#cc00cc"]/text()').get(),
+                'luminosity': [ordinal.xpath('following-sibling::font[@color="#cc00cc"]/text()').get()],
                 'date': dateparser.parse(re.search(
                     '[0-9]+/[0-9]+/[0-9]+',
                     ordinal.xpath('following-sibling::font[@size=2 and is_date(text())]//text()').get()
