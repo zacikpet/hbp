@@ -12,10 +12,9 @@ from dotenv import load_dotenv
 
 from commands import connect_command, fill_command, update_command, erase_command, classify_command, stats_command
 from encoders import MongoJSONEncoder, ObjectIdConverter
-from service import update
+from service import update, stats
 
 app = Flask(__name__)
-
 
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -92,13 +91,19 @@ def update_view():
     return {'exit_code': result}, 204
 
 
+@app.route('/stats', methods=['GET'])
+@cross_origin()
+def stats_view():
+    result = stats()
+    return jsonify(result), 200, {'Content-Type': 'application/json'}
+
+
 app.cli.add_command(fill_command)
 app.cli.add_command(update_command)
 app.cli.add_command(erase_command)
 app.cli.add_command(classify_command)
 app.cli.add_command(stats_command)
 app.cli.add_command(connect_command)
-
 
 if __name__ == '__main__':
     app.run()
