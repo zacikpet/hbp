@@ -19,7 +19,7 @@ app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 app.config['JWT_COOKIE_SECURE'] = False
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=1)
 jwt = JWTManager(app)
 
 cors = CORS(app)
@@ -40,7 +40,7 @@ def refresh_expiring_jwt(response):
     try:
         exp_timestamp = get_jwt()['exp']
         now = datetime.now(timezone.utc)
-        target_timestamp = datetime.timestamp(now + timedelta(minutes=15))
+        target_timestamp = datetime.timestamp(now + timedelta(seconds=15))
         if target_timestamp > exp_timestamp:
             access_token = create_access_token(identity=get_jwt_identity())
             set_access_cookies(response, access_token)
@@ -116,6 +116,12 @@ def logout():
     return response
 
 
+@app.route('/verify-auth', methods=['GET'])
+@jwt_required()
+def verify_auth():
+    return jsonify(message='Auth verified'), 200
+
+
 @app.route('/users/current', methods=['GET'])
 @jwt_required()
 def get_current_user():
@@ -130,16 +136,11 @@ def get_current_user():
         return jsonify(message='No current user'), 404
 
 
-@app.route('/users/<id>', methods=['DELETE'])
+@app.route('/users/delete', methods=['DELETE'])
 @jwt_required()
-def delete_user(id):
+def delete_user():
     email = get_jwt_identity()
-    user = users.find_one({'email': email})
-
-    if not user['verified']:
-        return jsonify(message='Your account is not yet verified'), 401
-
-    deleted_count = users.delete_one({'_id': ObjectId(id)})
+    deleted_count = users.delete_one({'email': email})
 
     if deleted_count == 0:
         return jsonify(message='User does not exist.'), 404
