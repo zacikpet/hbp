@@ -1,5 +1,9 @@
 import re
+import nltk
 from nltk import WordNetLemmatizer
+
+nltk.download('wordnet')
+nltk.download('stopwords')
 
 stemmer = WordNetLemmatizer()
 
