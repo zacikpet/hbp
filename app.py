@@ -122,6 +122,7 @@ def get_current_user():
     email = get_jwt_identity()
 
     user = users.find_one({'email': email})
+    del user['password']
 
     if user:
         return jsonify(user), 200
