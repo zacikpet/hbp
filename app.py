@@ -22,7 +22,7 @@ app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
 jwt = JWTManager(app)
 
-cors = CORS(app)
+cors = CORS(app, supports_credentials=True, origins=['localhost:3000', 'higgsbosonportal.herokuapp.com'])
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.json_encoder = MongoJSONEncoder
 app.url_map.converters['objectid'] = ObjectIdConverter
