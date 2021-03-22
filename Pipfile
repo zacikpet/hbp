@@ -19,6 +19,7 @@ nltk = "*"
 gunicorn = "*"
 python-dotenv = "*"
 apscheduler = "*"
+rq = "*"
 
 [dev-packages]
 
