@@ -69,7 +69,6 @@ def verification_required():
 
 
 @app.route('/register', methods=['POST'])
-@cross_origin(supports_credentials=True)
 def register():
     if 'email' not in request.json or 'password' not in request.json:
         return jsonify(message='Missing email or password'), 400
@@ -113,7 +112,6 @@ def login():
 
 
 @app.route('/logout', methods=['POST'])
-@cross_origin(supports_credentials=True)
 def logout():
     response = jsonify(message="Logout successful.")
     unset_jwt_cookies(response)
@@ -121,14 +119,12 @@ def logout():
 
 
 @app.route('/verify-auth', methods=['GET'])
-@cross_origin(supports_credentials=True)
 @jwt_required()
 def verify_auth():
     return jsonify(message='Auth verified'), 200
 
 
 @app.route('/users/current', methods=['GET'])
-@cross_origin(supports_credentials=True)
 @jwt_required()
 def get_current_user():
     email = get_jwt_identity()
@@ -143,7 +139,6 @@ def get_current_user():
 
 
 @app.route('/users/delete', methods=['DELETE'])
-@cross_origin(supports_credentials=True)
 @jwt_required()
 def delete_user():
     email = get_jwt_identity()
@@ -156,7 +151,6 @@ def delete_user():
 
 
 @app.route('/papers/<id>', methods=['GET'])
-@cross_origin()
 def get_paper(id):
     paper = papers.find_one({'_id': ObjectId(id)})
 
@@ -167,7 +161,6 @@ def get_paper(id):
 
 
 @app.route('/papers/<id>', methods=['PATCH'])
-@cross_origin()
 @jwt_required()
 @verification_required()
 def patch_paper(id):
@@ -179,7 +172,6 @@ def patch_paper(id):
 
 
 @app.route('/papers/<id>', methods=['DELETE'])
-@cross_origin()
 @jwt_required()
 @verification_required()
 def delete_paper(id):
@@ -188,7 +180,6 @@ def delete_paper(id):
 
 
 @app.route('/papers', methods=['GET'])
-@cross_origin(supports_credentials=True)
 def get_papers():
     items = papers.find()
     output = items.sort('date', pymongo.DESCENDING)
@@ -196,7 +187,6 @@ def get_papers():
 
 
 @app.route('/mass-limit', methods=['GET'])
-@cross_origin()
 def get_mass_limit():
     papers_with_limit = papers.find({'lower_limit': {'$exists': True, '$ne': None, '$gt': 0}})
     sorted_papers = papers_with_limit.sort('date', pymongo.ASCENDING)
