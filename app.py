@@ -10,7 +10,7 @@ from pymongo.collection import Collection
 from pymongo.database import Database
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity, get_jwt, \
-    set_access_cookies, unset_jwt_cookies
+    set_access_cookies, unset_jwt_cookies, verify_jwt_in_request
 from commands import connect_command, fill_command, update_command, erase_command, classify_command, stats_command
 from encoders import MongoJSONEncoder, ObjectIdConverter
 from utils import verification_required
@@ -104,9 +104,13 @@ def logout():
 
 
 @app.route('/verify-auth', methods=['GET'])
-@jwt_required()
 def verify_auth():
-    return jsonify(message='Auth verified'), 200
+
+    token = verify_jwt_in_request(optional=True)
+    if token:
+        return jsonify(message='Auth verified', logged_in=True)
+    else:
+        return jsonify(message='No auth', logged_in=False)
 
 
 @app.route('/users/current', methods=['GET'])
