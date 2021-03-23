@@ -5,7 +5,7 @@ import bcrypt
 import pymongo
 from bson import ObjectId
 from flask import Flask, abort, jsonify, request
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from flask_pymongo import PyMongo
 from pymongo.collection import Collection
 from pymongo.database import Database
@@ -35,6 +35,7 @@ db: Database = PyMongo(app, db_uri).db
 
 papers: Collection = db.papers
 users: Collection = db.users
+updates: Collection = db.updates
 
 
 @app.after_request
@@ -191,6 +192,15 @@ def get_mass_limit():
     papers_with_limit = papers.find({'lower_limit': {'$exists': True, '$ne': None, '$gt': 0}})
     sorted_papers = papers_with_limit.sort('date', pymongo.ASCENDING)
     return jsonify(sorted_papers), 200, {'Content-Type': 'application/json'}
+
+
+@app.route('/stats', methods=['GET'])
+@jwt_required()
+@verification_required()
+def get_stats():
+    total_papers = papers.count_documents({})
+    db_updates = updates.find({})
+    return jsonify(total_papers=total_papers, updates=db_updates)
 
 
 app.cli.add_command(fill_command)
