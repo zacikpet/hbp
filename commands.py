@@ -34,9 +34,10 @@ def fill_command():
 
 
 @click.command('update')
+@click.option('--trigger', default='manual', type=str)
 @with_appcontext
-def update_command():
-    update()
+def update_command(trigger):
+    update(trigger)
     print('Database updated.')
 
 

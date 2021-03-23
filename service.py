@@ -65,7 +65,7 @@ def fill():
     print('Database filled.')
 
 
-def update():
+def update(trigger: str):
     # Search for new ATLAS and CMS papers and insert into DB (upsert)
     # Update existing ones
     print('Searching for new articles...')
@@ -76,7 +76,8 @@ def update():
     connect()
 
     updates.insert_one({
-        'date': datetime.now()
+        'date': datetime.now(),
+        'trigger': trigger
     })
 
     return 0
