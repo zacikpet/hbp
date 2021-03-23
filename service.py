@@ -79,8 +79,6 @@ def update():
         'date': datetime.now()
     })
 
-    print('Database updated.')
-
     return 0
 
 

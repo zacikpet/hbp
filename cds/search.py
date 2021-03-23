@@ -80,8 +80,16 @@ def extract(search_result: Tuple[List[ElementTree.Element], str]) -> List[Dict]:
         report_numbers = record.findall(f"{ns}datafield[@tag='{tags['report_number']}']//{ns}subfield[@code='a']")
         dois = record.findall(f"{ns}datafield[@tag='{tags['doi']}']//{ns}subfield[@code='a']")
         cds_id = record.find(f"{ns}controlfield[@tag='{tags['cds_id']}']")
+        timestamp = record.find(f"{ns}controlfield[@tag='{tags['timestamp']}']")
         date = record.find(f"{ns}datafield[@tag='{tags['date']}']//{ns}subfield[@code='c']")
         files = record.findall(f"{ns}datafield[@tag='{tags['files']}']//{ns}subfield[@code='u']")
+
+        if date is not None:
+            parsed_date = parse_date(date.text)
+        elif timestamp is not None:
+            parsed_date = parse_date(' '.join([timestamp.text[0:4], timestamp.text[4:6], timestamp.text[6:8]]))
+        else:
+            parsed_date = None
 
         results.append({
             'cds_id': cds_id.text if cds_id is not None else None,
@@ -90,7 +98,7 @@ def extract(search_result: Tuple[List[ElementTree.Element], str]) -> List[Dict]:
             'type': categories[search_category]['type'],
             'title': title.text if title is not None else None,
             'abstract': abstract.text if abstract is not None else None,
-            'date': parse_date(date.text) if date is not None else None,
+            'date': parsed_date,
             'superseded': superseded.text if superseded is not None else None,
             'supersedes': supersedes.text if supersedes is not None else None,
             'report_number': [report_number.text for report_number in report_numbers],
