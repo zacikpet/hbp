@@ -110,10 +110,11 @@ def verify_auth():
     if token:
         email = get_jwt_identity()
         user = users.find_one({'email': email})
+        if user:
+            del user['password']
+            return jsonify(message='Auth verified', logged_in=True, user=user)
 
-        return jsonify(message='Auth verified', logged_in=True, user=user)
-    else:
-        return jsonify(message='No auth', logged_in=False, user=None)
+    return jsonify(message='No auth', logged_in=False, user=None)
 
 
 @app.route('/users/current', methods=['GET'])
