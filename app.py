@@ -103,7 +103,8 @@ def login():
         access_token = create_access_token(identity=email)
 
         if bcrypt.checkpw(password.encode(), user['password']):
-            response = jsonify(message="Login Successful", access_token=access_token)
+            del user['password']
+            response = jsonify(message="Login Successful", access_token=access_token, user=user)
             set_access_cookies(response, access_token)
             return response, 200
         else:
