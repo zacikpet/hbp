@@ -1,6 +1,5 @@
 import os
 from datetime import timedelta, datetime, timezone
-from functools import wraps
 import bcrypt
 import pymongo
 from bson import ObjectId
@@ -14,14 +13,15 @@ from flask_jwt_extended import JWTManager, jwt_required, create_access_token, ge
     set_access_cookies, unset_jwt_cookies
 from commands import connect_command, fill_command, update_command, erase_command, classify_command, stats_command
 from encoders import MongoJSONEncoder, ObjectIdConverter
+from utils import verification_required
 
 app = Flask(__name__)
+
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 app.config['JWT_COOKIE_SECURE'] = True
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
 app.config["JWT_COOKIE_SAMESITE"] = 'None'
-
 jwt = JWTManager(app)
 
 CORS(app, supports_credentials=True)
@@ -50,23 +50,6 @@ def refresh_expiring_jwt(response):
         return response
     except (RuntimeError, KeyError):
         return response
-
-
-def verification_required():
-    def wrapper(fn):
-        @wraps(fn)
-        def decorator(*args, **kwargs):
-            email = get_jwt_identity()
-            user = users.find_one({'email': email})
-
-            if not user['verified']:
-                return jsonify(message='Your account is not yet verified', code='not-verified'), 401
-            else:
-                return fn(*args, **kwargs)
-
-        return decorator
-
-    return wrapper
 
 
 @app.route('/register', methods=['POST'])
@@ -164,7 +147,7 @@ def get_paper(id):
 
 @app.route('/papers/<id>', methods=['PATCH'])
 @jwt_required()
-@verification_required()
+@verification_required(users)
 def patch_paper(id):
     data = request.json
 
@@ -175,7 +158,7 @@ def patch_paper(id):
 
 @app.route('/papers/<id>', methods=['DELETE'])
 @jwt_required()
-@verification_required()
+@verification_required(users)
 def delete_paper(id):
     papers.delete_one({'_id': ObjectId(id)})
     return '', 204
@@ -197,7 +180,7 @@ def get_mass_limit():
 
 @app.route('/stats', methods=['GET'])
 @jwt_required()
-@verification_required()
+@verification_required(users)
 def get_stats():
     total_papers = papers.count_documents({})
     db_updates = updates.find({})
