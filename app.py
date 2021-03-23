@@ -17,7 +17,7 @@ from encoders import MongoJSONEncoder, ObjectIdConverter
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
-app.config['JWT_COOKIE_SECURE'] = False
+app.config['JWT_COOKIE_SECURE'] = True
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
 jwt = JWTManager(app)
@@ -100,7 +100,7 @@ def login():
     if user:
         access_token = create_access_token(identity=email)
 
-        if bcrypt.hashpw(password.encode(), user['password']) == user['password']:
+        if bcrypt.checkpw(password.encode(), user['password']):
             response = jsonify(message="Login Successful", access_token=access_token)
             set_access_cookies(response, access_token)
             return response, 200
