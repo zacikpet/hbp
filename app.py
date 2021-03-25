@@ -171,10 +171,10 @@ def get_paper(id):
     return jsonify(paper), 200, {'Content-Type': 'application/json'}
 
 
-@app.route('/papers/<id>', methods=['PATCH'])
+@app.route('/papers/<id>', methods=['PUT'])
 @jwt_required()
 @verification_required()
-def patch_paper(id):
+def put_paper(id):
     data = request.json
 
     papers.update_one({'_id': ObjectId(id)}, {'$set': data})
