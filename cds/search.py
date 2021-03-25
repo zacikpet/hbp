@@ -84,12 +84,13 @@ def extract(search_result: Tuple[List[ElementTree.Element], str]) -> List[Dict]:
         date = record.find(f"{ns}datafield[@tag='{tags['date']}']//{ns}subfield[@code='c']")
         files = record.findall(f"{ns}datafield[@tag='{tags['files']}']//{ns}subfield[@code='u']")
 
+        parsed_date = None
+
         if date is not None:
             parsed_date = parse_date(date.text)
-        elif timestamp is not None:
+
+        if parsed_date is None and timestamp is not None:
             parsed_date = parse_date(' '.join([timestamp.text[0:4], timestamp.text[4:6], timestamp.text[6:8]]))
-        else:
-            parsed_date = None
 
         results.append({
             'cds_id': cds_id.text if cds_id is not None else None,
