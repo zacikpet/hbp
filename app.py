@@ -23,6 +23,8 @@ app.config['JWT_COOKIE_SECURE'] = True
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
 app.config["JWT_COOKIE_SAMESITE"] = 'None'
+app.config['JWT_CSRF_METHODS'] = ['DELETE']
+
 jwt = JWTManager(app)
 
 CORS(app, supports_credentials=True)
@@ -171,10 +173,10 @@ def get_paper(id):
     return jsonify(paper), 200, {'Content-Type': 'application/json'}
 
 
-@app.route('/papers/<id>', methods=['PUT'])
+@app.route('/papers/<id>', methods=['PATCH'])
 @jwt_required()
 @verification_required()
-def put_paper(id):
+def patch_paper(id):
     data = request.json
 
     papers.update_one({'_id': ObjectId(id)}, {'$set': data})
