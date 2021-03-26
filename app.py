@@ -178,7 +178,7 @@ def get_paper(id):
 @verification_required()
 def patch_paper(id):
     data = request.json
-
+    del data['_id']
     papers.update_one({'_id': ObjectId(id)}, {'$set': data})
 
     return data, 200, {'Content-Type': 'application/json'}
