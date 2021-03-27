@@ -19,6 +19,7 @@ dnspython = "*"
 flask-jwt-extended = "*"
 ner-annotator = "*"
 bcrypt = "*"
+gunicorn = "*"
 
 [dev-packages]
 
