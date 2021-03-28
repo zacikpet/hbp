@@ -157,8 +157,28 @@ def get_paper(id):
 @verification_required()
 def patch_paper(id):
     data = request.json
-    del data['_id']
-    papers.update_one({'_id': ObjectId(id)}, {'$set': data})
+    papers.update_one(
+        {'_id': ObjectId(id)},
+        {
+            '$set': {
+                'model': data['model'],
+                'luminosity': data['luminosity'],
+                'energy': data['energy'],
+                'particles': data['particles'],
+            },
+            '$addToSet': {
+                'reviewed_fields': {
+                    '$each': ['model', 'luminosity', 'energy', 'particles']
+                }
+            }
+        }
+    )
+
+    if 'mass_limit' in data:
+        papers.update_one({'_id': ObjectId(id)}, {'$set': {'mass_limit': data['mass_limit']}})
+
+    if 'precision' in data:
+        papers.update_one({'_id': ObjectId(id)}, {'$set': {'precision': data['precision']}})
 
     return data, 200, {'Content-Type': 'application/json'}
 

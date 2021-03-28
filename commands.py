@@ -47,3 +47,4 @@ def erase_command():
     print('Erasing database...')
     erase()
     print('Database erased.')
+
