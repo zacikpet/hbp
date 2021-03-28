@@ -1,5 +1,4 @@
 import os
-
 import pymongo
 from dotenv import load_dotenv
 from cds.search import get_all, get_many
@@ -46,6 +45,11 @@ def classify():
     print('Classifying articles...')
     for article in list(papers.find({})):
         classifiers = pipeline(article)
+
+        # Exclude already reviewed fields
+        reviewed_fields = article['reviewed_fields']
+        classifiers = {key: value for key, value in classifiers.items() if key not in reviewed_fields}
+
         papers.update_one(article, {'$set': classifiers})
 
 
