@@ -26,7 +26,7 @@ app.register_blueprint(api, url_prefix='/api')
 
 @app.route('/')
 @app.errorhandler(404)
-def root(_):
+def root(*_):
     return app.send_static_file('index.html')
 
 
