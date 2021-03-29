@@ -205,6 +205,13 @@ def get_mass_limit():
     return jsonify(sorted_papers), 200, {'Content-Type': 'application/json'}
 
 
+@api.route('/precision', methods=['GET'])
+def get_precision():
+    papers_with_precision = papers.find({'precision': {'$exists': True, '$ne': None}})
+    sorted_papers = papers_with_precision.sort('date', pymongo.ASCENDING)
+    return jsonify(sorted_papers), 200, {'Content-Type': 'application/json'}
+
+
 @api.route('/stats', methods=['GET'])
 @jwt_required()
 @verification_required()
