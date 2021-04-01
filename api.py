@@ -225,3 +225,19 @@ def get_stats():
     total_papers = papers.count_documents({})
     db_updates = updates.find({})
     return jsonify(total_papers=total_papers, updates=db_updates)
+
+
+@api.route('/feedback', methods=['POST'])
+def post_feedback():
+    feedback = request.json
+    date = datetime.now()
+    feedbacks.insert_one({**feedback, 'date': date})
+    return jsonify(success=True)
+
+
+@api.route('/feedback', methods=['GET'])
+@jwt_required()
+@verification_required()
+def get_feedback():
+    feedback = feedbacks.find({})
+    return jsonify(feedback=feedback)
