@@ -1,7 +1,7 @@
 import os
 from datetime import timedelta
 
-from flask import Flask
+from flask import Flask, request, abort
 from flask_jwt_extended import JWTManager
 
 from api import api
@@ -23,13 +23,17 @@ app.json_encoder = MongoJSONEncoder
 app.url_map.converters['objectid'] = ObjectIdConverter
 
 
+app.register_blueprint(api, url_prefix='/api')
+
+
+# react-router routes
 @app.route('/')
 @app.errorhandler(404)
-def root(*_):
+def root(error):
+    if request.path.startswith('/api/'):
+        return error, 404
+
     return app.send_static_file('index.html')
-
-
-app.register_blueprint(api, url_prefix='/api')
 
 
 app.cli.add_command(fill_command)

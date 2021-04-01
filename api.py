@@ -22,11 +22,6 @@ users: pymongo.collection.Collection = mongo.hbp.users
 feedbacks: pymongo.collection.Collection = mongo.hbp.feedbacks
 
 
-@api.app_errorhandler(404)
-def error_handler(error):
-    return error, 404
-
-
 @api.after_request
 def refresh_expiring_jwt(response):
     try:
