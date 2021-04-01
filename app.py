@@ -21,13 +21,14 @@ jwt = JWTManager(app)
 app.json_encoder = MongoJSONEncoder
 app.url_map.converters['objectid'] = ObjectIdConverter
 
-app.register_blueprint(api, url_prefix='/api')
-
 
 @app.route('/')
 @app.errorhandler(404)
 def root(*_):
     return app.send_static_file('index.html')
+
+
+app.register_blueprint(api, url_prefix='/api')
 
 
 app.cli.add_command(fill_command)

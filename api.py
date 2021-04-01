@@ -19,6 +19,12 @@ mongo = pymongo.MongoClient(db_uri)
 papers: pymongo.collection.Collection = mongo.hbp.papers
 updates: pymongo.collection.Collection = mongo.hbp.updates
 users: pymongo.collection.Collection = mongo.hbp.users
+feedbacks: pymongo.collection.Collection = mongo.hbp.feedbacks
+
+
+@api.app_errorhandler(404)
+def error_handler(error):
+    return error, 404
 
 
 @api.after_request
