@@ -5,7 +5,8 @@ from flask import Flask
 from flask_jwt_extended import JWTManager
 
 from api import api
-from commands import connect_command, fill_command, update_command, erase_command, classify_command, stats_command
+from commands import connect_command, fill_command, update_command, erase_command, classify_command, stats_command, \
+    classify_one_command
 from encoders import MongoJSONEncoder, ObjectIdConverter
 
 app = Flask(__name__, static_url_path='/static/', static_folder='client')
@@ -35,6 +36,7 @@ app.cli.add_command(fill_command)
 app.cli.add_command(update_command)
 app.cli.add_command(erase_command)
 app.cli.add_command(classify_command)
+app.cli.add_command(classify_one_command)
 app.cli.add_command(stats_command)
 app.cli.add_command(connect_command)
 

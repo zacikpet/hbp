@@ -1,6 +1,6 @@
 import click
 from flask.cli import with_appcontext
-from service import stats, update, fill, erase, classify, connect
+from service import stats, update, fill, erase, classify, connect, classify_one
 
 
 @click.command('stats')
@@ -23,6 +23,15 @@ def classify_command():
     # Run NLP classifiers and recognizers on all articles in DB
     print('Classifying articles...')
     classify()
+
+
+@click.command('classify_one')
+@click.option('--id', type=str)
+@with_appcontext
+def classify_one_command(id):
+    print('Classifying one article...')
+    classify_one(id)
+    print('Article Updated.')
 
 
 @click.command('fill')

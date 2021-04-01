@@ -1,5 +1,6 @@
 import os
 import pymongo
+from bson import ObjectId
 from dotenv import load_dotenv
 from cds.search import get_all, get_many
 from crawler.crawl import crawl
@@ -42,18 +43,21 @@ def connect():
 
 def classify():
     # Run NLP classifiers and recognizers on all articles in DB
-    print('Classifying articles...')
     for article in list(papers.find({})):
-        classifiers = pipeline(article)
+        classify_one(article['_id'])
 
-        # Exclude already reviewed fields
-        if 'reviewed_fields' in article:
-            reviewed_fields = article['reviewed_fields']
-            classifiers = {key: value for key, value in classifiers.items() if key not in reviewed_fields}
-        else:
-            article['reviewed_fields'] = []
 
-        papers.update_one(article, {'$set': classifiers})
+def classify_one(id):
+    article = papers.find_one({'_id': ObjectId(id)})
+    classifiers = pipeline(article)
+
+    if 'reviewed_fields' in article:
+        reviewed_fields = article['reviewed_fields']
+        classifiers = {key: value for key, value in classifiers.items() if key not in reviewed_fields}
+    else:
+        classifiers['reviewed_fields'] = []
+
+    papers.update_one(article, {'$set': classifiers})
 
 
 def fill():
