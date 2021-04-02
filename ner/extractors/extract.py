@@ -64,9 +64,22 @@ def get_collision(text: str) -> Optional[str]:
 
 
 def get_production(text: str) -> Optional[str]:
+    text = text.lower()
 
+    # associated production
+    if 'assoc' in text:
 
+        if 'top' in text or 'quark' in text:
+            return 'tth'
 
+        if 'vector' in text or 'boson' in text:
+            return 'whzh'
+
+    if 'gluon' in text or 'gg' in text or 'gf' in text:
+        return 'ggf'
+
+    if 'vector' in text or 'boson' in text or 'vbf' in text:
+        return 'vbf'
 
     return None
 
