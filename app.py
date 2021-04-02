@@ -29,7 +29,7 @@ app.register_blueprint(api, url_prefix='/api')
 # react-router routes
 @app.route('/')
 @app.errorhandler(404)
-def root(error):
+def root(error=None):
     if request.path.startswith('/api/'):
         return error, 404
 
