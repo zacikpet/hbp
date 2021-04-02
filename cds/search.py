@@ -1,5 +1,4 @@
-import datetime
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Tuple
 from xml.etree import ElementTree
 
 import dateparser
@@ -23,11 +22,11 @@ tags = {
 }
 
 
-def search(search_category: str) -> Tuple[List[ElementTree.Element], str]:
+def search(search_category: str) -> Tuple[List[Tuple[ElementTree.Element, str]], str]:
     index = 1
     previous_index = 0
     batch = 200
-    results = []
+    results: List[Tuple[ElementTree.Element, str]] = []
 
     while index != previous_index:
         params = {
@@ -47,32 +46,40 @@ def search(search_category: str) -> Tuple[List[ElementTree.Element], str]:
             # Pattern 1 location
             'f1': 'title'
         }
-        response = requests.get(url, params)
-        collection = ElementTree.fromstring(response.text)
+
+        xml_params = {
+            ** params,
+            'ot': ','.join(tags.values()),
+            'of': 'xm'
+        }
+
+        xml_response = requests.get(url, xml_params)
+        collection = ElementTree.fromstring(xml_response.text)
+
+        json_params = {
+            ** params,
+            'ot': 'creation_date',
+            'of': 'recjson'
+        }
+
+        json_response = requests.get(url, json_params).json()
+
+        creation_dates = [item.get('creation_date', None) for item in json_response]
 
         previous_index = index
         index += len(collection)
-        results += collection
+        results += zip(collection, creation_dates)
 
     return results, search_category
 
 
-def parse_date(date: str) -> Optional[datetime.datetime]:
-    options = ['DMY', 'YMD', 'MDY']
-    for option in options:
-        parsed_date = dateparser.parse(date, settings={'DATE_ORDER': option})
-        if parsed_date is not None:
-            return parsed_date
-    return None
-
-
-def extract(search_result: Tuple[List[ElementTree.Element], str]) -> List[Dict]:
+def extract(search_result: Tuple[List[Tuple[ElementTree.Element, str]], str]) -> List[Dict]:
     ns = '{http://www.loc.gov/MARC21/slim}'
 
     records, search_category = search_result
     results = []
 
-    for record in records:
+    for record, creation_date in records:
         title = record.find(f"{ns}datafield[@tag='{tags['title']}']//{ns}subfield[@code='a']")
         abstract = record.find(f"{ns}datafield[@tag='{tags['abstract']}']//{ns}subfield[@code='a']")
         superseded = record.find(f"{ns}datafield[@tag='{tags['superseded']}']//{ns}subfield[@code='w']")
@@ -81,21 +88,32 @@ def extract(search_result: Tuple[List[ElementTree.Element], str]) -> List[Dict]:
         dois = record.findall(f"{ns}datafield[@tag='{tags['doi']}']//{ns}subfield[@code='a']")
         cds_id = record.find(f"{ns}controlfield[@tag='{tags['cds_id']}']")
         timestamp = record.find(f"{ns}controlfield[@tag='{tags['timestamp']}']")
-        date = record.find(f"{ns}datafield[@tag='{tags['date']}']//{ns}subfield[@code='c']")
+        signed_date = record.find(f"{ns}datafield[@tag='{tags['date']}']//{ns}subfield[@code='c']")
         files = record.findall(f"{ns}datafield[@tag='{tags['files']}']//{ns}subfield[@code='u']")
 
-        if date is None:
-            parsed_date = dateparser.parse(
+        date_preference = ['creation_date', 'signed_dmy_date', 'signed_ymd_date', 'timestamp_date']
+
+        dates = dict()
+
+        if creation_date is not None:
+            dates['creation_date'] = dateparser.parse(creation_date)
+
+        if signed_date is not None:
+            dates['signed_dmy_date'] = dateparser.parse(signed_date.text, settings={'DATE_ORDER': 'DMY'})
+            dates['signed_ymd_date'] = dateparser.parse(signed_date.text, settings={'DATE_ORDER': 'YMD'})
+
+        if timestamp is not None:
+            dates['timestamp_date'] = dateparser.parse(
                 ' '.join([timestamp.text[0:4], timestamp.text[4:6], timestamp.text[6:8]]),
                 settings={'DATE_ORDER': 'YMD'}
             )
-        else:
-            dmy_date = dateparser.parse(date.text, settings={'DATE_ORDER': 'DMY'})
 
-            if dmy_date is None:
-                parsed_date = dateparser.parse(date.text, settings={'DATE_ORDER': 'YMD'})
-            else:
-                parsed_date = dmy_date
+        for option in date_preference:
+            if option in dates and dates[option] is not None:
+                final_date = dates[option]
+                break
+        else:
+            final_date = None
 
         results.append({
             'cds_id': cds_id.text if cds_id is not None else None,
@@ -104,7 +122,7 @@ def extract(search_result: Tuple[List[ElementTree.Element], str]) -> List[Dict]:
             'type': categories[search_category]['type'],
             'title': title.text if title is not None else None,
             'abstract': abstract.text if abstract is not None else None,
-            'date': parsed_date,
+            'date': final_date,
             'superseded': superseded.text if superseded is not None else None,
             'supersedes': supersedes.text if supersedes is not None else None,
             'report_number': [report_number.text for report_number in report_numbers],
