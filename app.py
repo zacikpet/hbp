@@ -1,7 +1,7 @@
 import os
 from datetime import timedelta
 
-from flask import Flask, request, abort
+from flask import Flask, request
 from flask_jwt_extended import JWTManager
 
 from api import api
