@@ -41,7 +41,8 @@ def extract_luminosity(item):
     if 'luminosity' in item:
         return item
     else:
-        entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'LUMINOSITY']
+        entities = [entity['value']
+                    for entity in item['entities'] if entity['name'] == 'LUMINOSITY']
 
     return {
         **item,
@@ -50,12 +51,26 @@ def extract_luminosity(item):
 
 
 def extract_energy(item):
-    entities = (entity['value'] for entity in item['entities'] if entity['name'] == 'ENERGY')
+    entities = (entity['value']
+                for entity in item['entities'] if entity['name'] == 'ENERGY')
 
-    return {
-        **item,
-        'energy': filter_duplicate(flatten([get_energy(entity) for entity in entities]))
-    }
+    if item['experiment'] in ['cdf', 'd0']:
+        return {**item, 'energy': [1960000]}
+
+    lhc_energies = [7000000, 8000000, 14000000]
+
+    energies = filter_duplicate(
+        flatten([get_energy(entity) for entity in entities])
+    )
+
+    if item['experiment'] in ['atlas', 'cms']:
+        energies = [energy for energy in energies if energy in lhc_energies]
+
+    else:
+        return {
+            **item,
+            'energy': filter_duplicate(flatten([get_energy(entity) for entity in entities]))
+        }
 
 
 def extract_collision(item):
@@ -63,7 +78,8 @@ def extract_collision(item):
         return {**item, 'collision': ['ee']}
 
     else:
-        entities = (entity['value'] for entity in item['entities'] if entity['name'] == 'COLLISION')
+        entities = (entity['value'] for entity in item['entities']
+                    if entity['name'] == 'COLLISION')
         return {
             **item,
             'collision': filter_duplicate([get_collision(entity) for entity in entities])
@@ -71,7 +87,8 @@ def extract_collision(item):
 
 
 def extract_production(item):
-    entities = (entity['value'] for entity in item['entities'] if entity['name'] == 'PRODUCTION')
+    entities = (entity['value'] for entity in item['entities']
+                if entity['name'] == 'PRODUCTION')
     productions = (get_production(entity) for entity in entities)
 
     return {
@@ -83,12 +100,14 @@ def extract_production(item):
 
 
 def extract_decay_a(item):
-    entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'DECAY_A']
+    entities = [entity['value']
+                for entity in item['entities'] if entity['name'] == 'DECAY_A']
     return {**item, 'decay_a': entities}
 
 
 def extract_decay_b(item):
-    entities = [entity['value'] for entity in item['entities'] if entity['name'] == 'DECAY_B']
+    entities = [entity['value']
+                for entity in item['entities'] if entity['name'] == 'DECAY_B']
     return {**item, 'decay_b': entities}
 
 
