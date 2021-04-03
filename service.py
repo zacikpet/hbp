@@ -25,20 +25,27 @@ def stats():
 
 
 def connect():
-    print('Connecting relevant articles...')
-    relevant = papers.find({'$or': [
-        {'supersedes': {'$ne': None, '$exists': True}},
-        {'superseded': {'$ne': None, '$exists': True}}
-    ]})
+    papers.update_many(
+        {}, {'$unset': {'superseded_id': '', 'supersedes_id': ''}}
+    )
 
-    for paper in relevant:
-        supersedes = papers.find_one({'cds_id': paper['supersedes']})
-        superseded = papers.find_one({'cds_id': paper['superseded']})
+    superseeders = papers.find({'supersedes': {'$ne': None, '$exists': True}})
 
-        papers.update_one(paper, {'$set': {
-            'supersedes_id': supersedes['_id'] if supersedes is not None else None,
-            'superseded_id': superseded['_id'] if superseded is not None else None,
-        }})
+    for paper in superseeders:
+        superseedee = papers.find_one({'cds_id': paper['supersedes']})
+        if superseedee is not None:
+            papers.update_one(
+                paper, {'$set': {'supersedes_id': superseedee['_id']}}
+            )
+
+    superseeded = papers.find({'superseded': {'$ne': None, '$exists': True}})
+
+    for paper in superseeded:
+        superseeder = papers.find_one({'cds_id': paper['superseded']})
+        if superseeder is not None:
+            papers.update_one(
+                paper, {'$set': {'superseded_id': superseeder['_id']}}
+            )
 
 
 def classify():
@@ -53,7 +60,8 @@ def classify_one(id):
 
     if 'reviewed_fields' in article:
         reviewed_fields = article['reviewed_fields']
-        classifiers = {key: value for key, value in classifiers.items() if key not in reviewed_fields}
+        classifiers = {key: value for key,
+                       value in classifiers.items() if key not in reviewed_fields}
     else:
         classifiers['reviewed_fields'] = []
 
@@ -81,7 +89,8 @@ def update(trigger: str):
     # Update existing ones
     print('Searching for new articles...')
     for article in get_many(['atlas_papers', 'atlas_notes', 'cms_papers', 'cms_notes']):
-        papers.update_one({'cds_id': article['cds_id']}, {'$set': article}, upsert=True)
+        papers.update_one({'cds_id': article['cds_id']}, {
+                          '$set': article}, upsert=True)
 
     classify()
     connect()
