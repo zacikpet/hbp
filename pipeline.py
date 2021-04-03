@@ -57,7 +57,7 @@ def extract_energy(item):
     if item['experiment'] in ['cdf', 'd0']:
         return {**item, 'energy': [1960000]}
 
-    lhc_energies = [7000000, 8000000, 14000000]
+    lhc_energies = [7000000, 8000000, 13000000, 14000000]
 
     energies = filter_duplicate(
         flatten([get_energy(entity) for entity in entities])
