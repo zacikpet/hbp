@@ -66,11 +66,10 @@ def extract_energy(item):
     if item['experiment'] in ['atlas', 'cms']:
         energies = [energy for energy in energies if energy in lhc_energies]
 
-    else:
-        return {
-            **item,
-            'energy': filter_duplicate(flatten([get_energy(entity) for entity in entities]))
-        }
+    return {
+        **item,
+        'energy': energies
+    }
 
 
 def extract_collision(item):
