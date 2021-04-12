@@ -1,20 +1,16 @@
 import pickle
-from sklearn.naive_bayes import GaussianNB
-from sklearn.feature_extraction.text import TfidfVectorizer
 from .util import preprocess_text
 
-with open('nlp/physics_model/classifier', 'rb') as pickefile:
-    classifier: GaussianNB = pickle.load(pickefile)
 
-with open('nlp/physics_model/vectorizer', 'rb') as pickefile:
-    vectorizer: TfidfVectorizer = pickle.load(pickefile)
+def predict_model(paper: str):
 
+    vectorizer = pickle.load(open('nlp/physics_model/vectorizer', 'rb'))
+    classifier = pickle.load(open('nlp/physics_model/classifier', 'rb'))
 
-def get_paper_model(paper: str):
-    paper = preprocess_text(paper)
+    processed_paper = preprocess_text(paper)
 
-    vectorized = vectorizer.transform([paper])
+    feature_vector = vectorizer.transform([processed_paper])
 
-    paper_model = classifier.predict(vectorized.toarray())
+    paper_model = classifier.predict(feature_vector)
 
-    return paper_model[0]
+    return paper_model[0].lower()

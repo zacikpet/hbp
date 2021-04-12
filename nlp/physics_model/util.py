@@ -1,6 +1,7 @@
 import re
 import nltk
 from nltk import WordNetLemmatizer
+from nltk.corpus import stopwords
 
 nltk.download('wordnet')
 nltk.download('stopwords')
@@ -34,6 +35,11 @@ def preprocess_text(text: str):
     text = text.split()
 
     text = [stemmer.lemmatize(word) for word in text]
+
+    # Remove stop words
+
+    text = [word for word in text if word not in stopwords.words('english')]
+
     text = ' '.join(text)
 
     return text

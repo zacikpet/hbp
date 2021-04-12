@@ -4,7 +4,7 @@ from ner import nlp
 from ner.extractors.extract import get_luminosity, get_energy, get_collision, get_production, get_particles
 from ner.converters import get_article_text
 from ner.decay_a import nlp_decay_a
-from nlp.physics_model.classify import get_paper_model
+from nlp.physics_model.classify import predict_model
 
 
 def filter_duplicate(lst: List) -> List:
@@ -36,8 +36,6 @@ def extract_entities(item):
 
 
 def extract_luminosity(item):
-    print(item)
-
     if 'luminosity' in item:
         return item
     else:
@@ -136,16 +134,11 @@ def extract_decay_particles(item):
 
 def classify_model(item):
     text = get_article_text(item['title'], item['abstract'])
-    model = get_paper_model(text)
-
-    if model == 0:
-        model_text = 'bsm'
-    else:
-        model_text = 'sm'
+    model = predict_model(text)
 
     return {
         **item,
-        'model': model_text
+        'model': model
     }
 
 
