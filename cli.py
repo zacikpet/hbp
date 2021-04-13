@@ -1,12 +1,15 @@
 import click
 from flask.cli import with_appcontext
-from service import stats, update, fill, erase, classify, connect, classify_one
+from service import HBPService
+from database import mongo
+
+service = HBPService(mongo)
 
 
 @click.command('stats')
 @with_appcontext
 def stats_command():
-    statistics = stats()
+    statistics = service.stats()
     print(statistics)
 
 
@@ -14,7 +17,7 @@ def stats_command():
 @with_appcontext
 def connect_command():
     print('Connecting relevant articles...')
-    connect()
+    service.connect()
 
 
 @click.command('classify')
@@ -22,7 +25,7 @@ def connect_command():
 def classify_command():
     # Run NLP classifiers and recognizers on all articles in DB
     print('Classifying articles...')
-    classify()
+    service.classify()
 
 
 @click.command('classify_one')
@@ -30,15 +33,14 @@ def classify_command():
 @with_appcontext
 def classify_one_command(id):
     print('Classifying one article...')
-    classify_one(id)
+    service.classify_one(id)
     print('Article Updated.')
 
 
 @click.command('fill')
 @with_appcontext
 def fill_command():
-    fill()
-
+    service.fill()
     print('Database filled.')
 
 
@@ -46,7 +48,7 @@ def fill_command():
 @click.option('--trigger', default='manual', type=str)
 @with_appcontext
 def update_command(trigger):
-    update(trigger)
+    service.update(trigger)
     print('Database updated.')
 
 
@@ -54,6 +56,5 @@ def update_command(trigger):
 @with_appcontext
 def erase_command():
     print('Erasing database...')
-    erase()
+    service.delete_all_papers()
     print('Database erased.')
-
