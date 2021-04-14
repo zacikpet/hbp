@@ -3,7 +3,6 @@ HBP REST API
 """
 from functools import wraps
 from datetime import datetime, timezone, timedelta
-from service import HBPService
 import exception
 import bcrypt
 from flask import Blueprint, request, jsonify, abort
@@ -11,10 +10,10 @@ from flask_jwt_extended import (
     create_access_token, set_access_cookies, unset_jwt_cookies, verify_jwt_in_request,
     get_jwt_identity, jwt_required, get_jwt
 )
+from service import HBPService
 from database import mongo
 
 api = Blueprint('api', __name__)
-
 service = HBPService(mongo)
 
 

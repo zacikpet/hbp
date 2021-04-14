@@ -6,21 +6,25 @@ import datetime
 from bson import ObjectId
 from functools import wraps
 
-import exception
 from cds.search import get_all, get_many
 from crawler.crawl import crawl
 from pipeline import pipeline
 from datetime import datetime
 
+from exception import (
+    NoSuchArticleException, UserAlreadyExistsException, UserNotVerifiedException,
+    InvalidPasswordException, MissingFieldsException, NoSuchUserException
+)
+
 
 class HBPService():
-    def __init__(self, mongo_client):
-        self.__papers = mongo_client.hbp.papers
-        self.__users = mongo_client.hbp.users
-        self.__updates = mongo_client.hbp.updates
-        self.__feedbacks = mongo_client.hbp.feedbacks
+    def __init__(self, mongo):
+        self._papers = mongo.hbp.papers
+        self._users = mongo.hbp.users
+        self._feedbacks = mongo.hbp.feedbacks
+        self._updates = mongo.hbp.updates
 
-    def __user_to_dto(self, user):
+    def user_to_dto(self, user):
         return {
             'firstname': user['firstname'],
             'lastname': user['lastname'],
@@ -29,20 +33,21 @@ class HBPService():
         }
 
     def read_all_papers(self):
-        papers = self.__papers.find({})
-        output = papers.sort('date', pymongo.DESCENDING)
+
+        all = self._papers.find({})
+        output = all.sort('date', pymongo.DESCENDING)
         return list(output)
 
     def read_paper(self, id):
-        paper = self.__papers.find_one({'_id': ObjectId(id)})
+        paper = self._papers.find_one({'_id': ObjectId(id)})
 
         if paper is None:
-            raise exception.NoSuchArticleException
+            raise NoSuchArticleException
 
         return paper
 
     def update_paper(self, id, data):
-        self.__papers.update_one(
+        self._papers.update_one(
             {'_id': ObjectId(id)},
             {
                 '$set': {
@@ -60,29 +65,29 @@ class HBPService():
         )
 
         if 'mass_limit' in data:
-            self.__papers.update_one({'_id': ObjectId(id)}, {
+            self._papers.update_one({'_id': ObjectId(id)}, {
                 '$set': {'mass_limit': data['mass_limit']}})
 
         if 'precision' in data:
-            self.__papers.update_one({'_id': ObjectId(id)}, {
+            self._papers.update_one({'_id': ObjectId(id)}, {
                 '$set': {'precision': data['precision']}})
 
         return data, 200, {'Content-Type': 'application/json'}
 
     def delete_all_papers(self):
-        return self.__papers.delete_many({})
+        return self._papers.delete_many({})
 
     def delete_paper(self, id):
-        result = self.__papers.delete_one({'_id': ObjectId(id)})
+        result = self._papers.delete_one({'_id': ObjectId(id)})
 
         if result.deleted_count == 0:
-            raise exception.NoSuchArticleException
+            raise NoSuchArticleException
 
     def create_user(self, firstname, lastname, email, password):
-        user_same_email = self.__users.find_one({'email': email})
+        user_same_email = self._users.find_one({'email': email})
 
         if user_same_email is not None:
-            raise exception.UserAlreadyExistsException
+            raise UserAlreadyExistsException
 
         salt = bcrypt.gensalt()
         password_hash = bcrypt.hashpw(password.encode(), salt)
@@ -94,7 +99,7 @@ class HBPService():
             'verified': False
         }
 
-        return self.__users.insert_one(user)
+        return self._users.insert_one(user)
 
     def authenticate_user(self, data):
         required_fields = ['email', 'password']
@@ -104,42 +109,42 @@ class HBPService():
         ]
 
         if len(missing_fields) > 0:
-            raise exception.MissingFieldsException(missing_fields)
+            raise MissingFieldsException(missing_fields)
 
-        user = self.__users.find_one({'email': data['email']})
+        user = self._users.find_one({'email': data['email']})
 
         if user is None:
-            raise exception.NoSuchUserException
+            raise NoSuchUserException
 
         if not bcrypt.checkpw(data['password'].encode(), user['password']):
-            raise exception.InvalidPasswordException
+            raise InvalidPasswordException
 
-        return self.__user_to_dto(user)
+        return self.user_to_dto(user)
 
     def read_user_by_email(self, email):
-        user = self.__users.find_one({'email': email})
+        user = self._users.find_one({'email': email})
 
         if not user:
-            raise exception.NoSuchUserException
+            raise NoSuchUserException
 
-        return self.__user_to_dto(user)
+        return self.user_to_dto(user)
 
     def delete_user_by_email(self, email):
-        deleted_count = self.__users.delete_one({'email': email})
+        deleted_count = self._users.delete_one({'email': email})
 
         if deleted_count == 0:
-            raise exception.NoSuchUserException
+            raise NoSuchUserException
 
     def create_feedback(self, data):
         data['date'] = datetime.now()
-        return self.__feedbacks.insert_one({data})
+        return self._feedbacks.insert_one({data})
 
     def read_all_feedbacks(self):
-        return self.__feedbacks.find({})
+        return self._feedbacks.find({})
 
     def stats(self):
-        count = len(list(self.__papers.find({})))
-        update_history = list(self.__updates.find({}))
+        count = len(list(self._papers.find({})))
+        update_history = list(self._updates.find({}))
         return {
             'total_papers': count,
             'updates': update_history
@@ -150,49 +155,49 @@ class HBPService():
             @wraps(fn)
             def decorator(*args, **kwargs):
                 email = get_identity_fn()
-                user = self.__users.find_one({'email': email})
+                user = self._users.find_one({'email': email})
 
                 if not user['verified']:
-                    raise exception.UserNotVerifiedException
+                    raise UserNotVerifiedException
                 else:
                     return fn(*args, **kwargs)
             return decorator
         return wrapper
 
     def connect(self):
-        self.__papers.update_many(
+        self._papers.update_many(
             {}, {'$unset': {'superseded_id': '', 'supersedes_id': ''}}
         )
 
-        superseeders = self.__papers.find(
+        superseeders = self._papers.find(
             {'supersedes': {'$ne': None, '$exists': True}})
 
         for paper in superseeders:
-            superseedee = self.__papers.find_one(
+            superseedee = self._papers.find_one(
                 {'cds_id': paper['supersedes']})
             if superseedee is not None:
-                self.__papers.update_one(
+                self._papers.update_one(
                     paper, {'$set': {'supersedes_id': superseedee['_id']}}
                 )
 
-        superseeded = self.__papers.find(
+        superseeded = self._papers.find(
             {'superseded': {'$ne': None, '$exists': True}})
 
         for paper in superseeded:
-            superseeder = self.__papers.find_one(
+            superseeder = self._papers.find_one(
                 {'cds_id': paper['superseded']})
             if superseeder is not None:
-                self.__papers.update_one(
+                self._papers.update_one(
                     paper, {'$set': {'superseded_id': superseeder['_id']}}
                 )
 
     def classify(self):
         # Run NLP classifiers and recognizers on all articles in DB
-        for article in list(self.__papers.find({})):
+        for article in list(self._papers.find({})):
             self.classify_one(article['_id'])
 
     def classify_one(self, id):
-        article = self.__papers.find_one({'_id': ObjectId(id)})
+        article = self._papers.find_one({'_id': ObjectId(id)})
         classifiers = pipeline(article)
 
         if 'reviewed_fields' in article:
@@ -202,17 +207,17 @@ class HBPService():
         else:
             classifiers['reviewed_fields'] = []
 
-        self.__papers.update_one(article, {'$set': classifiers})
+        self._papers.update_one(article, {'$set': classifiers})
 
     def fill(self):
-        if self.__papers.count_documents({}) > 0:
+        if self._papers.count_documents({}) > 0:
             print('Database must be empty.')
             return
 
         print('Filling database...')
         articles = crawl() + get_all()
 
-        self.__papers.insert_many(articles)
+        self._papers.insert_many(articles)
 
         self.classify()
         self.connect()
@@ -224,13 +229,13 @@ class HBPService():
         # Update existing ones
         print('Searching for new articles...')
         for article in get_many(['atlas_papers', 'atlas_notes', 'cms_papers', 'cms_notes']):
-            self.__papers.update_one({'cds_id': article['cds_id']}, {
+            self._papers.update_one({'cds_id': article['cds_id']}, {
                 '$set': article}, upsert=True)
 
         self.classify()
         self.connect()
 
-        self.__updates.insert_one({
+        self._updates.insert_one({
             'date': datetime.now(),
             'trigger': trigger
         })
@@ -238,13 +243,13 @@ class HBPService():
         return 0
 
     def get_mass_limit(self):
-        papers_with_limit = self.__papers.find(
+        papers_with_limit = self._papers.find(
             {'lower_limit': {'$exists': True, '$ne': None, '$gt': 0}})
         sorted_papers = papers_with_limit.sort('date', pymongo.ASCENDING)
         return list(sorted_papers)
 
     def get_precision(self):
-        papers_with_precision = self.__papers.find(
+        papers_with_precision = self._papers.find(
             {'precision': {'$exists': True, '$ne': None}})
         sorted_papers = papers_with_precision.sort('date', pymongo.ASCENDING)
         return list(sorted_papers)

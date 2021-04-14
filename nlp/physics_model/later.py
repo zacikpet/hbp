@@ -4,7 +4,7 @@ from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
-from util import preprocess_text
+from .util import preprocess_text
 
 vectorizer = pickle.load(open('vectorizer', 'rb'))
 classifier = pickle.load(open('classifier', 'rb'))
