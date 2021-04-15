@@ -17,44 +17,38 @@ from cli import (
 )
 
 
-def create_app():
-    """
-    Initialise the Flask Application
-    """
-    app = Flask(__name__, static_url_path='/static/', static_folder='client')
+app = Flask(__name__, static_url_path='/static/', static_folder='client')
 
-    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
-    app.config['JWT_COOKIE_SECURE'] = True
-    app.config['JWT_TOKEN_LOCATION'] = ['cookies']
-    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
-    app.config['JWT_COOKIE_SAMESITE'] = "Strict"
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+app.config['JWT_COOKIE_SECURE'] = True
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
+app.config['JWT_COOKIE_SAMESITE'] = "Strict"
 
-    JWTManager(app)
+JWTManager(app)
 
-    app.json_encoder = MongoJSONEncoder
-    app.url_map.converters['objectid'] = ObjectIdConverter
+app.json_encoder = MongoJSONEncoder
+app.url_map.converters['objectid'] = ObjectIdConverter
 
-    app.register_blueprint(api, url_prefix='/api')
+app.register_blueprint(api, url_prefix='/api')
 
-    @app.route('/')
-    @app.errorhandler(404)
-    def _root(error=None):
-        if request.path.startswith('/api/'):
-            return error, 404
 
-        return app.send_static_file('index.html')
+@app.route('/')
+@app.errorhandler(404)
+def _root(error=None):
+    if request.path.startswith('/api/'):
+        return error, 404
 
-    app.cli.add_command(fill_command)
-    app.cli.add_command(update_command)
-    app.cli.add_command(erase_command)
-    app.cli.add_command(classify_command)
-    app.cli.add_command(classify_one_command)
-    app.cli.add_command(stats_command)
-    app.cli.add_command(connect_command)
+    return app.send_static_file('index.html')
 
-    return app
 
+app.cli.add_command(fill_command)
+app.cli.add_command(update_command)
+app.cli.add_command(erase_command)
+app.cli.add_command(classify_command)
+app.cli.add_command(classify_one_command)
+app.cli.add_command(stats_command)
+app.cli.add_command(connect_command)
 
 if __name__ == '__main__':
-    flask_app = create_app()
-    flask_app.run()
+    app.run()
