@@ -1,3 +1,3 @@
 import spacy
 
-nlp = spacy.load('ner/model_v1.1')
+nlp = spacy.load('ner/model_v1.3')

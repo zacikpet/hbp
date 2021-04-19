@@ -67,26 +67,36 @@ def get_production(text: str) -> Optional[str]:
     text = text.lower()
 
     # associated production
-    if 'assoc' in text:
+    if 'assoc' in text or 'wh' in text or 'zh' in text:
 
         if 'top' in text or 'quark' in text:
             return 'tth'
 
-        if 'vector' in text or 'boson' in text:
+        if 'vector' in text or 'boson' in text or 'wh' in text or 'zh' in text:
             return 'whzh'
 
-    if 'gluon' in text or 'gg' in text or 'gf' in text:
-        return 'ggf'
+    if 'fusion' in text or 'f' in text:
+        if 'gluon' in text or 'gg' in text or 'gf' in text:
+            return 'ggf'
 
-    if 'vector' in text or 'boson' in text or 'vbf' in text:
-        return 'vbf'
+        if 'vector' in text or 'boson' in text or 'vbf' in text:
+            return 'vbf'
 
     return None
 
 
-def get_particles(text: str) -> List[str]:
-    pair = False
+def get_associated_production(text: str) -> Optional[str]:
 
+    text = text.lower()
+
+    if 'boson' in text or 'w' in text or 'z' in text or 'vector' in text or 'weak' in text:
+        return 'whzh'
+
+    if 'top' in text or 'quark' in text or 'tth' in text:
+        return 'tth'
+
+
+def get_particles(text: str) -> List[str]:
     words = [word.lower() for word in text.split(' ') if word != '']
     joined = ' '.join(words)
 
@@ -94,49 +104,58 @@ def get_particles(text: str) -> List[str]:
         # Bosons
         'boson': ['boson'],
         'higgs': ['h boson', 'higgs'],
-        'photon': ['photon', 'γ'],
+        'photon': ['photon', 'γ', 'gamma'],
         'gluon': ['gluon'],
-        'w_boson': ['w boson'],
-        'z_boson': ['z boson'],
+        'w_boson': ['w boson', 'ww'],
+        'z_boson': ['z boson', 'zz'],
 
         # Quarks
         'quark': ['quark'],
-        'top': ['top quark', 't quark', 't-quark', 'top', 'top-quark'],
-        'bottom': ['bottom quark', 'b quark', 'b-quark', 'bottom', 'bottom-quark'],
-        'up': ['up quark', 'u quark', 'u-quark', 'up', 'up-quark'],
+        'top': ['top quark', 't quark', 't-quark', 'top', 'top-quark', 'tt'],
+        'bottom': ['bottom quark', 'b quark', 'b-quark', 'bottom', 'bottom-quark', 'beauty', 'bb'],
+        'up': ['up quark', 'u quark', 'u-quark', 'up-quark'],
         'down': ['down quark', 'd quark', 'd-quark', 'down', 'down-quark'],
         'charm': ['charm quark', 'c quark', 'c-quark', 'charm', 'charm-quark'],
         'strange': ['strange quark', 's quark', 's-quark', 'strange', 'strange-quark'],
 
         # 1st gen leptons
-        'lepton': ['lepton'],
-        'electron': ['electron'],
-        'muon': ['muon', 'μ'],
+        'lepton': ['lepton', 'ℓ'],
+        'electron': ['electron', 'ee'],
+        'muon': ['muon', 'μ', 'mu'],
         'tau': ['tau', 'τ'],
 
         # Neutrinos
-        'neutrino': ['neutrino'],
-        'e_neutrino': ['e neutrino', 'electron neutrino'],
-        'm_neutrino': ['m neutrino', 'muon neutrino'],
-        't_neutrino': ['t neutrino', 'electron neutrino'],
+        'neutrino': ['neutrino', 'ν'],
+        'e_neutrino': ['e neutrino', 'electron neutrino', 'eν'],
+        'm_neutrino': ['m neutrino', 'muon neutrino', 'μν'],
+        't_neutrino': ['t neutrino', 'electron neutrino', 'τν'],
 
         # Other
         'invisible': ['invisible'],
         'jets': ['jets'],
         'new': ['new'],
         'gravitino': ['gravitino'],
-        'dark': ['dark', 'dark matter']
+        'dark': ['dark', 'dark matter'],
+        'lsp': ['lsp']
     }
-
-    if 'pair' in words or 'di' in words:
-        pair = True
 
     result = []
 
+    exclusion = {
+        'top': {
+            'tt': 'bottom'
+        }
+    }
+
     for particle in options.keys():
         for option in options[particle]:
-            if option in text.lower():
+
+            if particle in exclusion and option in exclusion[particle]:
+                if exclusion[particle][option] in joined:
+                    continue
+
+            if option in joined:
                 result.append(particle)
                 break
 
-    return result
+    return list(set(result))

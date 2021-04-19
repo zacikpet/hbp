@@ -1,8 +1,16 @@
 {
-	"models": [
-		{
-			"name": "hbp",
-			"entities": ["TYPE", "LUMINOSITY", "ENERGY", "DECAY_A", "COLLISION","PRODUCTION", "MODEL", "DECAY_B"]
-		}
-	]
+  "models": [
+    {
+      "name": "hbp",
+      "entities": [
+        "LUMINOSITY",
+        "ENERGY",
+        "DECAY_PRODUCT",
+        "DECAY_NOTATION",
+        "DECAY_CHANNEL",
+        "PRODUCTION",
+        "ASSOCIATED"
+      ]
+    }
+  ]
 }

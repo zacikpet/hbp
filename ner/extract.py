@@ -1,6 +1,6 @@
 import spacy
 
-model_name = 'model_v1.1'
+model_name = 'model_v1.3'
 
 test_text = input("Enter text:")
 

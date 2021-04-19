@@ -1,0 +1,590 @@
+[
+  {
+    "content": "Combined measurements of the mass and signal strength of the Higgs-like boson with the ATLAS detector using up to 25 fb^-1 of proton-proton collision data. An update is presented of the measurement of the properties of the newly discovered boson using the the full pp collision data sample recorded by the ATLAS experiment at the LHC for the channels H\u2192 \u03b3\u03b3 and H \u2192 ZZ^(*)\u2192 4l, corresponding to integrated luminosities of about 4.8 fb^-1 at \u221a(s)=7TeV and 20.7 fb^-1 at \u221a(s)=8TeV. The combined mass measurement derived from the H\u2192 \u03b3\u03b3 and H \u2192 ZZ^(*)\u2192 4l channels is m_H=125.5 \u00b1 0.2 (stat) ^+0.5_-0.6 (sys)GeV. The combination of all final states, including the H \u2192\u03c4^+\u03c4^- and H \u2192 bb\u0305 channels using data corresponding to integrated luminosity of about 4.8 fb^-1 at \u221a(s)=7TeV and 13 fb^-1 at \u221a(s)=8TeV and the H \u2192 WW^(*)\u2192 l\u03bd l\u03bd channel using data corresponding to an integrated luminosity of 13 fb^-1 at \u221a(s)=8TeV, is reported in terms of the combined signal strength (\u03bc) and production and decay mode specific signal strengths. The combined signal strength is determined to be \u03bc = 1.43 \u00b1 0.16 (stat)\u00b1 0.14 (sys) at a mass of 125.5 GeV.",
+    "entities": [
+      [114, 122, "LUMINOSITY"],
+      [351, 356, "DECAY_NOTATION"],
+      [361, 375, "DECAY_NOTATION"],
+      [427, 436, "LUMINOSITY"],
+      [440, 449, "ENERGY"],
+      [454, 464, "LUMINOSITY"],
+      [468, 477, "ENERGY"],
+      [526, 531, "DECAY_NOTATION"],
+      [536, 550, "DECAY_NOTATION"],
+      [658, 667, "DECAY_NOTATION"],
+      [672, 679, "DECAY_NOTATION"],
+      [748, 757, "LUMINOSITY"],
+      [761, 770, "ENERGY"],
+      [775, 783, "LUMINOSITY"],
+      [787, 796, "ENERGY"],
+      [805, 822, "DECAY_NOTATION"],
+      [887, 895, "LUMINOSITY"],
+      [899, 908, "ENERGY"]
+    ]
+  },
+  {
+    "content": "Flavour independent search for Higgs bosons decaying into hadronic final states in e+e- collisions. A search for the Higgsstrahlung process e+e- -> hZ is described, where the neutral Higgs boson h is assumed to decay into hadronic final states. In order to be sensitive to a broad range of models, the search is performed independent of the flavour content of the Higgs boson decay. The analysis is based on e+e- collision data collected by the OPAL detector at energies between 192 GeV and 209 GeV. The search does not reveal any significant excess over the Standard Model background prediction. Results are combined with previous searches at energies around 91 GeV and at 189 GeV. A limit is set on the product of the cross-section and the hadronic branching ration of the Higgs boson, as a function of the Higgs boson mass. Assuming the hZ coupling predicted by the Standard Model, and a Higgs boson decaying only into hadronic final states, a lower bound of 104 GeV/c2 is set on the mass at the 95% confidence level.",
+    "entities": [
+      [117, 139, "PRODUCTION"],
+      [479, 486, "ENERGY"],
+      [491, 499, "ENERGY"],
+      [660, 666, "ENERGY"],
+      [674, 682, "ENERGY"],
+      [58, 79, "DECAY_PRODUCT"],
+      [222, 243, "DECAY_PRODUCT"],
+      [922, 943, "DECAY_PRODUCT"]
+    ]
+  },
+  {
+    "content": "Search for the flavor-changing interactions of the top quark with the Higgs boson in H \u2192 bb\u0305 channel at \u221a(s)=13 TeV. A search for flavor-changing neutral currents (FCNC) in associated production of a top quark with a Higgs boson is presented. Two channels are considered: top quark pair production, with FCNC decay of the top quark or antiquark, and single top production (pp \u2192 tH). This is the first analysis to probe top-Higgs FCNC couplings in the single top production mode. A final state with one isolated lepton and at least three reconstructed jets, among which at least two are identified as b quark jets, is studied. The data sample corresponds to an integrated luminosity of 35.9 fb^-1 recorded by the CMS experiment at the LHC in proton-proton collisions at \u221a(s)=13 TeV in 2016. No significant deviation is observed from predicted background. Observed (expected) upper limits at 95",
+    "entities": [
+      [104, 116, "ENERGY"],
+      [272, 297, "PRODUCTION"],
+      [451, 477, "PRODUCTION"],
+      [685, 695, "LUMINOSITY"],
+      [769, 780, "ENERGY"],
+      [85, 92, "DECAY_NOTATION"],
+      [200, 209, "ASSOCIATED"],
+      [350, 371, "PRODUCTION"]
+    ]
+  },
+  {
+    "content": "Search for invisible Higgs produced in association with a Z boson. %% A direct search for a standard-model-like Higgs boson produced in association with a Z boson and decaying to invisible particles is reported. A non-zero partial decay width to invisible particles could provide evidence for physics beyond the standard model. The search is performed in data samples corresponding to integrated luminosities of 5.1 fb^-1 at \u221a(s) = 7 TeV and 19.6 fb^-1 at \u221a(s) = 8 TeV, recorded by the CMS experiment at the Large Hadron Collider. No deviation from the background expectation is observed and limits are set on the branching fraction of the standard model Higgs boson decaying to invisible particles assuming the standard model production rate. For a Higgs boson with = 125, the observed (expected) 95 %%",
+    "entities": [
+      [412, 421, "LUMINOSITY"],
+      [425, 437, "ENERGY"],
+      [442, 452, "LUMINOSITY"],
+      [456, 468, "ENERGY"],
+      [58, 65, "ASSOCIATED"],
+      [155, 162, "ASSOCIATED"],
+      [179, 198, "DECAY_PRODUCT"],
+      [246, 265, "DECAY_PRODUCT"],
+      [679, 698, "DECAY_PRODUCT"]
+    ]
+  },
+  {
+    "content": "Inclusive search for a highly boosted Higgs boson decaying to a bottom quark-antiquark pair. An inclusive search for the standard model Higgs boson (H) produced with large transverse momentum (pT) and decaying to a bottom quark-antiquark pair (bb\u00c2\u00af) is performed using a data set of pp collisions at s=13\u00e2\u0080\u0089\u00e2\u0080\u0089TeV collected with the CMS experiment at the LHC. The data sample corresponds to an integrated luminosity of 35.9\u00e2\u0080\u0089\u00e2\u0080\u0089fb-1. A highly Lorentz-boosted Higgs boson decaying to bb\u00c2\u00af is reconstructed as a single, large radius jet, and it is identified using jet substructure and dedicated b tagging techniques. The method is validated with Z\u00e2\u0086\u0092bb\u00c2\u00af decays. The Z\u00e2\u0086\u0092bb\u00c2\u00af process is observed for the first time in the single-jet topology with a local significance of 5.1 standard deviations (5.8 expected). For a Higgs boson mass of 125\u00c2 GeV, an excess of events above the expected background is observed (expected) with a local significance of 1.5 (0.7) standard deviations. The measured cross section times branching fraction for production via gluon fusion of H\u00e2\u0086\u0092bb\u00c2\u00af with reconstructed pT>450\u00e2\u0080\u0089\u00e2\u0080\u0089GeV and in the pseudorapidity range -2.5<\u00ce\u00b7<2.5 is 74\u00c2\u00b148(stat)-10+17(syst)\u00e2\u0080\u0089fb, which is consistent within uncertainties with the standard model prediction.",
+    "entities": [
+      [300, 313, "ENERGY"],
+      [419, 433, "LUMINOSITY"],
+      [1051, 1063, "PRODUCTION"],
+      [64, 91, "DECAY_PRODUCT"],
+      [215, 242, "DECAY_PRODUCT"],
+      [484, 488, "DECAY_PRODUCT"]
+    ]
+  },
+  {
+    "content": "Search for single production of a vector-like B quark decaying into a bottom quark and a Higgs boson which decays into a pair of photons. A search is presented for single production of a vector-like B quark that decays into a Higgs boson and a b quark. The search uses a dataset corresponding to 79.8 fb^-1 of pp collisions at \u221a(s)=13 TeV collected during 2015-2017 with the ATLAS detector at the Large Hadron Collider. The analysis focuses on the presence of a Higgs boson that decays into two photons, a high-momentum b-jet and a forward jet, characteristic of t-channel production of the signal process. The main background process is non-resonant diphoton production, with additional small contributions from Standard Model processes containing H\u2192\u03b3\u03b3 decays. No significant excess above the background expectation is observed, and upper limits on the signal production cross section are set as a function of the B-quark mass. Assuming a generalized coupling \u03ba_B = 0.5 and doublet branching ratios of 50% for B\u2192 Hb and B\u2192 Zb, B quarks with masses less than 1210 GeV are excluded at the 95% confidence level.",
+    "entities": [
+      [296, 306, "LUMINOSITY"],
+      [327, 338, "ENERGY"],
+      [70, 82, "DECAY_PRODUCT"],
+      [89, 100, "DECAY_PRODUCT"],
+      [121, 136, "DECAY_PRODUCT"],
+      [226, 237, "DECAY_PRODUCT"],
+      [244, 251, "DECAY_PRODUCT"],
+      [491, 502, "DECAY_PRODUCT"],
+      [749, 753, "DECAY_NOTATION"],
+      [1011, 1016, "DECAY_NOTATION"],
+      [1021, 1026, "DECAY_NOTATION"]
+    ]
+  },
+  {
+    "content": "Search for Neutral Higgs Bosons Decaying to Tau Pairs in pp Collisions at sqrts=7 TeV. A search for neutral Higgs bosons in proton-proton collisions at the LHC at a center-of-mass energy of 7 TeV is presented. The results are based on a data sample corresponding to an integrated luminosity of 1.1/fb recorded by the CMS experiment. The search uses decays of the Higgs bosons to tau pairs, including the cases where the Higgs boson is produced in association with a b-quark jet (MSSM search) or two forward jets from vector boson fusion Higgs boson production (SM search). No excess is observed in the tau-pair invariant-mass spectrum. The resulting upper limits on the Higgs boson production cross section times branching fraction to tau pairs, as a function of the pseudoscalar Higgs boson mass, yield stringent new bounds in the MSSM parameter space.",
+    "entities": [
+      [74, 86, "ENERGY"],
+      [190, 195, "ENERGY"],
+      [294, 300, "LUMINOSITY"],
+      [517, 559, "PRODUCTION"],
+      [44, 53, "DECAY_PRODUCT"],
+      [379, 388, "DECAY_PRODUCT"],
+      [466, 477, "ASSOCIATED"],
+      [495, 511, "ASSOCIATED"]
+    ]
+  },
+  {
+    "content": "Evidence for Higgs boson decays to a low-mass dilepton system and a photon in pp collisions at \u221a(s) = 13 TeV with the ATLAS detector. A search for the Higgs boson decaying into a photon and a pair of electrons or muons with an invariant mass m_\u2113\u2113 < 30 GeV is presented. The analysis is performed using 139 fb^-1 of proton-proton collision data, produced by the LHC at a centre-of-mass energy of 13 TeV and collected by the ATLAS experiment. Evidence for the H\u2192\u2113\u2113\u03b3 process is found with a significance of 3.2\u03c3 over the background-only hypothesis, compared to an expected significance of 2.1\u03c3. The best-fit value of the signal strength parameter, defined as the ratio of the observed signal yield to the one expected in the Standard Model, is \u03bc = 1.5 \u00b1 0.5. The Higgs boson production cross-section times the H \u2192\u2113\u2113\u03b3 branching ratio for m_\u2113\u2113 < 30 GeV is determined to be 8.7 ^+2.8_-2.7 fb.",
+    "entities": [
+      [95, 108, "ENERGY"],
+      [302, 311, "LUMINOSITY"],
+      [395, 401, "ENERGY"],
+      [37, 61, "DECAY_PRODUCT"],
+      [68, 74, "DECAY_PRODUCT"],
+      [179, 185, "DECAY_PRODUCT"],
+      [192, 218, "DECAY_PRODUCT"],
+      [458, 463, "DECAY_NOTATION"],
+      [807, 813, "DECAY_NOTATION"]
+    ]
+  },
+  {
+    "content": "Combination of standard model Higgs boson searches and measurements of the properties of the new boson with a mass near 125 GeV. Measurements of the properties of the recently discovered boson with a mass near 125 are presented. The results are based on data samples corresponding to integrated luminosities of up to 5.1 fb^-1 at 7 TeV and up to 19.6 fb^-1 at 8 TeV in proton proton collisions at the LHC. Five decay modes are studied: \u03b3\u03b3, ZZ, WW, \u03c4\u03c4, and bb. The mass of the new boson is measured to be 125.7\u00b1 0.3 (stat.) \u00b1 0.3 (syst.) GeV. The event yields obtained by the different analyses targeting specific decay modes and production mechanisms are consistent with those expected for the standard model (SM) Higgs boson. The best-fit signal strength for all channels combined, expressed in units of the SM Higgs boson cross section, is 0.80\u00b10.14 at the measured mass. The consistency of the couplings of the observed boson with those predicted for the SM Higgs boson is tested in various ways, and no significant deviations are found.",
+    "entities": [
+      [317, 326, "LUMINOSITY"],
+      [330, 335, "ENERGY"],
+      [346, 356, "LUMINOSITY"],
+      [360, 365, "ENERGY"],
+      [436, 438, "DECAY_CHANNEL"],
+      [440, 442, "DECAY_CHANNEL"],
+      [444, 446, "DECAY_CHANNEL"],
+      [448, 450, "DECAY_CHANNEL"],
+      [456, 458, "DECAY_CHANNEL"]
+    ]
+  },
+  {
+    "content": "A flavour-independent Higgs boson search in e^+ e^- collisions at \u221a(s) up to 209 GeV. A search for the Higgsstrahlung process e+e- -> HZ is carried out, covering decays of the Higgs boson into any quark pair, a gluon pair or a tau pair. The analysis is based on the 630pb-1 of data collected by the ALEPH detector at LEP at centre-of-mass energies from 189 to 209GeV. A 95% C.L. lower mass limit of 109.1GeV/c2 is obtained for a Higgs boson cross section equal to that expected from the Standard Model if the Higgs boson decays exclusively into hadrons and/or taus, irrespective of the relative branching fractions.",
+    "entities": [
+      [66, 70, "ENERGY"],
+      [77, 85, "ENERGY"],
+      [266, 273, "LUMINOSITY"],
+      [103, 125, "PRODUCTION"],
+      [197, 207, "DECAY_PRODUCT"],
+      [211, 221, "DECAY_PRODUCT"],
+      [227, 235, "DECAY_PRODUCT"],
+      [353, 356, "ENERGY"],
+      [360, 366, "ENERGY"],
+      [545, 552, "DECAY_PRODUCT"],
+      [560, 564, "DECAY_PRODUCT"]
+    ]
+  },
+  {
+    "content": "A search for doubly-charged Higgs production in Z^0 decays.",
+    "entities": [[48, 51, "DECAY_CHANNEL"]]
+  },
+  {
+    "content": "A search for neutral Higgs particles in Z0 decays.",
+    "entities": [[40, 42, "DECAY_CHANNEL"]]
+  },
+  {
+    "content": "Searches for electroweak neutralino and chargino production in channels with Higgs, Z, and W bosons in pp collisions at 8 TeV. Searches for supersymmetry (SUSY) are presented based on the electroweak pair production of neutralinos and charginos, leading to decay channels with Higgs, Z, and W bosons and undetected lightest SUSY particles (LSPs). The data sample corresponds to an integrated luminosity of about 19.5 fb^-1 of proton-proton collisions at a center-of-mass energy of 8 TeV collected in 2012 with the CMS detector at the LHC. The main emphasis is neutralino pair production in which each neutralino decays either to a Higgs boson (h) and an LSP or to a Z boson and an LSP, leading to hh, hZ, and ZZ states states with missing transverse energy E_ T^ miss. A second aspect is chargino-neutralino pair production, leading to hW states with E_ T^ miss. The decays of a Higgs boson to a bottom-quark pair, to a photon pair, and to final states with leptons are considered in conjunction with hadronic and leptonic decay modes of the Z and W bosons. No evidence is found for supersymmetric particles, and 95% confidence level upper limits are evaluated for the respective pair production cross sections and for neutralino and chargino mass values.",
+    "entities": [
+      [120, 126, "ENERGY"],
+      [412, 422, "LUMINOSITY"],
+      [481, 486, "ENERGY"],
+      [896, 913, "DECAY_PRODUCT"],
+      [920, 931, "DECAY_PRODUCT"]
+    ]
+  },
+  {
+    "content": "Search for charged Higgs bosons produced via vector boson fusion and decaying into a pair of W and Z bosons using proton-proton collisions at \u221a(s) = 13 TeV. A search for charged Higgs bosons produced in vector boson fusion processes and decaying into W and Z A search for charged Higgs bosons produced via vector boson fusion and decaying into W and Z bosons using proton-proton collisions at \u221a(s)= 13 TeV is presented. The data sample corresponds to an integrated luminosity of 15.2 fb^-1 collected with the CMS detector in 2015 and 2016. The event selection requires three leptons (electrons or muons), two jets with large pseudorapidity separation and high dijet mass, and missing transverse momentum. The observation agrees with the standard model prediction. Limits on the vector boson fusion production cross section times branching fraction for new charged physical states are reported as a function of mass from 200 to 2000 GeV and interpreted in the context of Higgs triplet models.",
+    "entities": [
+      [142, 156, "ENERGY"],
+      [203, 222, "PRODUCTION"],
+      [293, 325, "PRODUCTION"],
+      [393, 405, "ENERGY"],
+      [479, 489, "LUMINOSITY"],
+      [45, 64, "PRODUCTION"],
+      [85, 107, "DECAY_PRODUCT"],
+      [251, 258, "DECAY_PRODUCT"],
+      [344, 358, "DECAY_PRODUCT"],
+      [778, 797, "PRODUCTION"]
+    ]
+  },
+  {
+    "content": "Search for light bosons in decays of the 125 GeV Higgs boson in proton-proton collisions at \u221a(s) = 8 TeV. A search is presented for decays beyond the standard model of the 125 GeV Higgs bosons to a pair of light bosons, based on models with extended scalar sectors. Light boson masses between 5 and 62.5 GeV are probed in final states containing four \u00cf\u0084 leptons, two muons and two b quarks, or two muons and two \u00cf\u0084 leptons. The results are from data in proton-proton collisions corresponding to an integrated luminosity of 19.7 fb^\u00e2\u0088\u00921, accumulated by the CMS experiment at the LHC at a center-of-mass energy of 8 TeV. No evidence for such exotic decays is found in the data. Upper limits are set on the product of the cross section and branching fraction for several signal processes. The results are also compared to predictions of two-Higgs-doublet models, including those with an additional scalar singlet.",
+    "entities": [
+      [92, 105, "ENERGY"],
+      [523, 535, "LUMINOSITY"],
+      [612, 618, "ENERGY"],
+      [11, 23, "DECAY_PRODUCT"],
+      [198, 218, "DECAY_PRODUCT"]
+    ]
+  },
+  {
+    "content": "Search for invisible decays of the Higgs boson produced through vector boson fusion at \u221a(s) = 13 TeV. A search for invisible decays of the Higgs boson is performed using 13 TeV proton-proton collision data collected by the CMS experiment at the LHC in 2016, corresponding to an integrated luminosity of 35.9 fb^-1. The search targets the production of the Higgs boson through vector boson fusion. The data are found to be in agreement with the predicted background contributions from standard model processes. An observed (expected) upper limit of 0.28 (0.21), at 95",
+    "entities": [
+      [64, 83, "PRODUCTION"],
+      [87, 101, "ENERGY"],
+      [170, 176, "ENERGY"],
+      [303, 313, "LUMINOSITY"],
+      [376, 395, "PRODUCTION"],
+      [11, 20, "DECAY_CHANNEL"],
+      [115, 124, "DECAY_CHANNEL"]
+    ]
+  },
+  {
+    "content": "Inclusive search for the standard model Higgs boson produced in pp collisions at \u221a(s)=13 TeV using H\u2192bb\u0305 decays. A search for the standard model Higgs boson produced with high transverse momentum decaying to a bottom quark-antiquark pair has been performed using a data set of pp collisions at \u221a(s)=13 TeV collected with the CMS experiment at the LHC. The data sample corresponds to an integrated luminosity of 35.9 fb^-1. A high-transverse-momentum Higgs boson decaying to bb\u0305 is reconstructed as a single jet and identified based on jet substructure and dedicated b-tagging techniques. The analysis strategy is validated with Z\u2192bb\u0305 decays. The Z\u2192bb\u0305 process is observed with a local significance of 5.1 standard deviations for the first time in the single jet topology. For a Higgs boson mass of 125 GeV, an excess of events is observed above the expected background with a local significance of 1.5 standard deviations. The measured cross section of H(bb\u0305) production for p_T>450 GeV is 74_-49^+51 fb.",
+    "entities": [
+      [81, 92, "ENERGY"],
+      [294, 305, "ENERGY"],
+      [411, 421, "LUMINOSITY"],
+      [99, 104, "DECAY_NOTATION"],
+      [210, 237, "DECAY_PRODUCT"],
+      [474, 477, "DECAY_PRODUCT"]
+    ]
+  },
+  {
+    "content": "Search for resonant double Higgs production with bbZZ decays in the bb\u0305\u2113\u2113\u03bd\u03bd final state. A search for the resonant double Higgs boson production is performed using 2016 data collected with the CMS experiment at \u221a(s) = 13 TeV corresponding to an integrated luminosity of 35.9 fb^-1. Events in which one Higgs boson decays to a pair of b quarks, and the other Higgs boson to a pair of Z bosons are studied. Decays to electron and muon pairs are selected to reconstruct an on-shell Z boson, while the other Z boson is allowed to be off-shell and required to decay to neutrinos: X \u2192 HH \u2192 bb\u0305ZZ^*\u2192 bb\u0305\u2113\u2113\u03bd\u03bd. Limits are set on the resonant double Higgs boson production cross section for a resonance with a mass in the range from 250 to 1000 GeV for spin 0 and spin 2 hypotheses.",
+    "entities": [
+      [211, 224, "ENERGY"],
+      [270, 280, "LUMINOSITY"],
+      [11, 43, "PRODUCTION"],
+      [49, 60, "DECAY_CHANNEL"],
+      [106, 144, "PRODUCTION"],
+      [326, 342, "DECAY_PRODUCT"],
+      [375, 391, "DECAY_PRODUCT"],
+      [415, 438, "DECAY_PRODUCT"],
+      [575, 600, "DECAY_NOTATION"],
+      [624, 662, "PRODUCTION"]
+    ]
+  },
+  {
+    "content": "Search for decays of the 125 GeV Higgs boson into a Z boson and a \u03c1 or \u03d5 meson. The decays of the 125 GeV Higgs boson into a Z boson and a \u03c1^0(770) or \u03d5(1020) meson are searched for using proton-proton collision data collected by the CMS experiment at the LHC from 2016 to 2018 at \u221a(s)=13 TeV. The analysed data set corresponds to an integrated luminosity of 137 fb^-1. Events are selected in which the Z boson decays into a pair of electrons or a pair of muons, and the \u03c1 and \u03d5 mesons decay into pairs of pions and kaons, respectively. No significant excess above the background model is observed. As different polarization states are possible for the decay products of the Z boson and \u03c1 or \u03d5 mesons, affecting the signal acceptance, scenarios in which the decays are longitudinally or transversely polarized are considered. Upper limits at the 95",
+    "entities": [
+      [281, 293, "ENERGY"],
+      [359, 368, "LUMINOSITY"],
+      [52, 59, "DECAY_PRODUCT"],
+      [66, 78, "DECAY_PRODUCT"],
+      [125, 132, "DECAY_PRODUCT"],
+      [139, 164, "DECAY_PRODUCT"],
+      [425, 442, "DECAY_PRODUCT"],
+      [448, 461, "DECAY_PRODUCT"],
+      [497, 521, "DECAY_PRODUCT"]
+    ]
+  },
+  {
+    "content": "Measurements of the Higgs boson inclusive, differential and production cross sections in the 4\u2113 decay channel at \u221a(s) = 13 TeV with the ATLAS detector. Inclusive, differential and production mode cross sections of the Higgs boson are measured in the H \u2192 ZZ^*\u2192 4\u2113 decay channel. Additionally, cross sections are measured for the main production modes in several exclusive regions of the Higgs boson production phase space. The dataset used corresponds to proton-proton collision data produced at the Large Hadron Collider at a centre-of-mass energy of 13 TeV and recorded by the ATLAS detector from 2015 to 2018, equivalent to an integrated luminosity of 139 fb^-1. The inclusive fiducial cross section for the process H \u2192 ZZ^*\u2192 4\u2113 is measured to be 3.35 \u00b1 0.32 fb, while the Standard Model prediction is 3.41 \u00b1 0.18 fb. The cross-section times H \u2192 ZZ^* branching ratio with |y_H|< 2.5 for gluon fusion and vector-boson fusion production are measured to be 1.14 \u00b1 0.13 pb and 0.13 \u00b1 0.04 pb, respectively. All measurements are in agreement with the Standard Model prediction.",
+    "entities": [
+      [113, 126, "ENERGY"],
+      [551, 557, "ENERGY"],
+      [654, 663, "LUMINOSITY"],
+      [889, 901, "PRODUCTION"],
+      [93, 109, "DECAY_CHANNEL"],
+      [250, 262, "DECAY_NOTATION"],
+      [718, 730, "DECAY_NOTATION"],
+      [844, 852, "DECAY_NOTATION"],
+      [906, 925, "PRODUCTION"]
+    ]
+  },
+  {
+    "content": "Search for nonresonant Higgs boson pair production in final states with two bottom quarks and two photons in pp collisions at \u221a(s)=13 TeV. A search for nonresonant production of Higgs boson pairs via gluon-gluon fusion and vector boson fusion in final states with two bottom quarks and two photons is presented. This search uses data from proton-proton collisions at a center-of-mass energy of \u221a(s)=13 TeV recorded by the CMS detector at the LHC from 2016 to 2018, corresponding to an integrated luminosity of 137 fb^-1. No signal is observed, and a 95",
+    "entities": [
+      [126, 138, "ENERGY"],
+      [200, 218, "PRODUCTION"],
+      [223, 242, "PRODUCTION"],
+      [394, 405, "ENERGY"],
+      [510, 519, "LUMINOSITY"],
+      [11, 50, "PRODUCTION"],
+      [72, 89, "DECAY_PRODUCT"],
+      [94, 106, "DECAY_PRODUCT"],
+      [152, 195, "PRODUCTION"],
+      [264, 281, "DECAY_PRODUCT"],
+      [286, 297, "DECAY_PRODUCT"]
+    ]
+  },
+  {
+    "content": "Search for non-minimal Higgs bosons in Z0 decays.",
+    "entities": [[39, 41, "DECAY_CHANNEL"]]
+  },
+  {
+    "content": "Combination of searches for invisible Higgs boson decays with the ATLAS experiment. Dark matter particles, if sufficiently light, may be produced in decays of the Higgs boson. This Letter presents a statistical combination of searches for H\u2192invisible decays where H is produced according to the Standard Model via vector boson fusion, Z(\u2113\u2113)H, and W/Z(had)H, all performed with the ATLAS detector using 36.1 fb^-1 of pp collisions at a center-of-mass energy of \u221a(s) = 13 TeV at the LHC. In combination with the results at \u221a(s) = 7 and 8 TeV, an exclusion limit on the H\u2192invisible branching ratio of 0.26 (0.17^+0.07_-0.05) at 95% confidence level is observed (expected).",
+    "entities": [
+      [314, 333, "PRODUCTION"],
+      [335, 341, "PRODUCTION"],
+      [347, 356, "PRODUCTION"],
+      [402, 412, "LUMINOSITY"],
+      [460, 473, "ENERGY"],
+      [521, 539, "ENERGY"],
+      [28, 37, "DECAY_CHANNEL"],
+      [239, 250, "DECAY_NOTATION"],
+      [567, 578, "DECAY_NOTATION"]
+    ]
+  },
+  {
+    "content": "Search for a Standard Model Higgs boson in the H \u2192 ZZ \u2192 l^+l^-\u03bd\u03bd decay channel with the ATLAS detector. A search for a heavy Standard Model Higgs boson decaying via H->ZZ->llnunu, where l=e,mu, is presented. It is based on proton-proton collision data at sqrt(s)=7 TeV, collected by the ATLAS experiment at the LHC in the first half of 2011 and corresponding to an integrated luminosity of 1.04 fb^-1. The data are compared to the expected Standard Model backgrounds. The data and the combined background expectations are found to be in agreement and upper limits are placed on the Higgs boson production cross section over the entire mass window considered; in particular the production of a Standard Model Higgs boson is excluded in the region 340 < m_H < 450 GeV at the 95% confidence level.",
+    "entities": [
+      [255, 268, "ENERGY"],
+      [390, 400, "LUMINOSITY"],
+      [47, 64, "DECAY_NOTATION"],
+      [165, 178, "DECAY_NOTATION"]
+    ]
+  },
+  {
+    "content": "Search for heavy neutral Higgs bosons produced in association with b-quarks and decaying to b-quarks at \u221a(s)=13 TeV with the ATLAS detector. A search for heavy neutral Higgs bosons produced in association with one or two b-quarks and decaying to b-quark pairs is presented using 27.8 fb^-1 of \u221a(s)=13 TeV proton\u2013proton collision data recorded by the ATLAS detector at the Large Hadron Collider during 2015 and 2016. No evidence of a signal is found. Upper limits on the heavy neutral Higgs boson production cross-section times its branching ratio to bb\u0305 are set, ranging from 4.0 to 0.6 pb at 95",
+    "entities": [
+      [104, 115, "ENERGY"],
+      [279, 289, "LUMINOSITY"],
+      [293, 304, "ENERGY"],
+      [67, 75, "ASSOCIATED"],
+      [92, 100, "DECAY_PRODUCT"],
+      [210, 229, "ASSOCIATED"],
+      [246, 259, "DECAY_PRODUCT"]
+    ]
+  },
+  {
+    "content": "Search for the Standard Model Higgs boson in the decay channel H \u2192 ZZ^(*)\u2192 4l with 4.8 fb^-1 of pp collisions at \u221a(s)=7 TeV with ATLAS. This Letter presents a search for the Standard Model Higgs boson in the decay channel H->ZZ(*)->l+l-l'+l'-, where l,l'=e or mu, using proton-proton collisions at sqrt(s)=7 TeV recorded with the ATLAS detector and corresponding to an integrated luminosity of 4.8 fb^-1. The four-lepton mass distribution is compared with Standard Model background expectations to derive upper limits on the cross section of a Standard Model Higgs boson with a mass between 110 GeV and 600 GeV which exclude the mass ranges 134-156 GeV, 182-233 GeV, 256-265 GeV and 266-415 GeV at the 95% confidence level. The largest upward deviations from the background-only hypothesis are observed for Higgs boson masses of 125, 244 and 500 GeV with local significances of 2.1, 2.2 and 2.1 standard deviations, respectively. Once the look-elsewhere effect is considered, none of these excesses are significant.",
+    "entities": [
+      [63, 77, "DECAY_NOTATION"],
+      [83, 92, "LUMINOSITY"],
+      [113, 123, "ENERGY"],
+      [298, 311, "ENERGY"],
+      [394, 403, "LUMINOSITY"],
+      [222, 242, "DECAY_NOTATION"]
+    ]
+  },
+  {
+    "content": "Combination of Higgs Boson Searches with up to 4.9 fb-1 of pp Collisions Data Taken at a center-of-mass energy of 7 TeV with the ATLAS Experiment at the LHC. A preliminary combination of Standard Model Higgs searches with the ATLAS experiment, in a dataset corresponding to an integrated luminosity of up to 4.9 fb\u00e2\u0088\u00921 of pp collisions collected at \u00e2\u0088\u009as = 7 TeV at the LHC, is presented. The Higgs boson mass ranges from 112.7 GeV to 115.5 GeV, 131 GeV to 237 GeV and 251 GeV to 468 GeV are excluded at the 95% confidence level (C.L.), while the expected Higgs boson mass exclusion in the absence of a signal ranges from 124.6 GeV to 520 GeV. An excess of events is observed for a Higgs boson mass hypothesis close to mH =126 GeV. The maximum local significance of this excess is 3.6\u00cf\u0083 above the expected SM background, while the global probability of such a fluctuation to happen anywhere in the full explored Higgs mass domain is estimated to be approximately 1%, corresponding to a global significance of 2.3\u00cf\u0083 . The three most sensitive channelsinthismassrange,H\u00e2\u0086\u0092\u00ce\u00b3\u00ce\u00b3,H\u00e2\u0086\u0092ZZ(\u00e2\u0088\u0097)\u00e2\u0086\u0092l+l\u00e2\u0088\u0092l+l\u00e2\u0088\u0092 andH\u00e2\u0086\u0092WW(\u00e2\u0088\u0097)\u00e2\u0086\u0092l+\u00ce\u00bdl\u00e2\u0088\u0092\u00ce\u00bd, contribute individual local significances of 2.8\u00cf\u0083 , 2.1\u00cf\u0083 and 1.4\u00cf\u0083 , respectively, to the excess.",
+    "entities": [
+      [47, 55, "LUMINOSITY"],
+      [114, 119, "ENERGY"],
+      [308, 318, "LUMINOSITY"],
+      [349, 361, "ENERGY"]
+    ]
+  },
+  {
+    "content": "Higgs to tau tau (MSSM) (HCP). A search for neutral Higgs bosons in the minimal supersymmetric extension of the standard model (MSSM) decaying to tau pairs is performed using events recorded by the CMS experiment at the LHC in 2011 and 2012 at a center-of-mass energy of 7 TeV and 8 TeV respectively. The dataset corresponds to an integrated luminosity of 17 fb^-1, with 4.9 fb^-1 at 7 TeV and 12.1 fb^-1 at 8 TeV. To enhance the sensitivity to neutral MSSM Higgs bosons, the search includes the case where the Higgs boson is produced in association with a b-quark jet. No excess is observed in the tau-pair invariant-mass spectrum. Exclusion limits in the MSSM parameter space of M_A and tan\u03b2 in the m_h^ max scenario are presented.",
+    "entities": [
+      [9, 16, "DECAY_PRODUCT"],
+      [146, 155, "DECAY_PRODUCT"],
+      [271, 276, "ENERGY"],
+      [281, 286, "ENERGY"],
+      [356, 364, "LUMINOSITY"],
+      [371, 380, "LUMINOSITY"],
+      [384, 389, "ENERGY"],
+      [394, 404, "LUMINOSITY"],
+      [408, 414, "ENERGY"],
+      [557, 568, "ASSOCIATED"]
+    ]
+  },
+  {
+    "content": "A search for invisible Higgs bosons produced in e^+ e^- interactions at LEP 2 energies. Searches for HZ production with the Higgs boson decaying into an invisible final state have been performed with the data collected by the DELPHI experiment up to the centre-of-mass energy of 183 GeV. The hadronic and muon pair final states of the Z boson were analysed. From the absence of signal, upper limits on the cross-section and the corresponding Higgs boson mass limits were set at 95",
+    "entities": [
+      [13, 22, "DECAY_CHANNEL"],
+      [153, 174, "DECAY_PRODUCT"],
+      [279, 287, "ENERGY"],
+      [101, 114, "PRODUCTION"]
+    ]
+  },
+  {
+    "content": "Search for heavy neutral Higgs bosons produced in association with b-quarks and decaying to b-quarks at \u221a(s)=13 TeV with the ATLAS detector. A search for heavy neutral Higgs bosons produced in association with one or two b-quarks and decaying to b-quark pairs is presented using 27.8 fb^-1 of \u221a(s)=13 TeV proton-proton collision data recorded by the ATLAS detector at the Large Hadron Collider during 2015 and 2016. No evidence of a signal is found. Upper limits on the heavy neutral Higgs boson production cross-section times its branching ratio to bb\u0305 are set, ranging from 4.0 to 0.6 pb at 95% confidence level over a Higgs boson mass range of 450 to 1400 GeV. Results are interpreted within the two-Higgs-doublet model and the Minimal Supersymmetric Standard Model.",
+    "entities": [
+      [67, 75, "ASSOCIATED"],
+      [92, 100, "DECAY_PRODUCT"],
+      [104, 115, "ENERGY"],
+      [210, 229, "ASSOCIATED"],
+      [246, 259, "DECAY_PRODUCT"],
+      [279, 289, "LUMINOSITY"],
+      [293, 304, "ENERGY"]
+    ]
+  },
+  {
+    "content": "Search for a Standard Model Higgs in the H- gt;ZZ- gt;llvv decay channel with 4.7 fb^-1 with the ATLAS detector. A search for a heavy Standard Model Higgs boson decaying via htollvv, where ell=e,mu, is presented. It is based on proton-proton collision data at sqrts=7 TeV, collected by the ATLAS experiment at the LHC in the first half of 2011 corresponding to an integrated luminosity of 4.7 fb^-1. The data are compared to the expected Standard Model backgrounds. Data and the combined background expectations are found to be in agreement and upper limits are placed on the Higgs boson production cross section over the entire mass window considered; in particular the production of a Standard Model Higgs boson is excluded in the region 320 lt; m_mathrmH lt; 560 GeV at the 95% confidence level.",
+    "entities": [
+      [41, 58, "DECAY_NOTATION"],
+      [78, 87, "LUMINOSITY"],
+      [260, 271, "ENERGY"],
+      [389, 398, "LUMINOSITY"]
+    ]
+  },
+  {
+    "content": "Search for an Invisible Higgs Boson. This physics analysis summary describes a search for invisible decays of a Higgs boson produced via vector boson fusion. The search is performed using the full 8 dataset collected by CMS during 2012, with an integrated luminosity of 19.6 fb^-1. Events are selected with a dedicated trigger based on the vector boson fusion tag jet topology, together with large missing transverse energy. The offline selection makes further use of the tag jet topology. The dominant backgrounds from \u2192\u03bd\u03bd and \u2192\u2113\u03bd in which the charged lepton goes unidentified, and QCD multijet production, are estimated from observed data. Minor backgrounds are estimated from Monte-Carlo simulation. An upper limit on the invisible branching fraction of the 125 GeV boson is placed at 69",
+    "entities": [
+      [90, 99, "DECAY_CHANNEL"],
+      [270, 280, "LUMINOSITY"],
+      [340, 359, "PRODUCTION"],
+      [137, 156, "PRODUCTION"]
+    ]
+  },
+  {
+    "content": "Search for the bb\u0305 decay of the Standard Model Higgs boson in associated (W/Z)H production with the ATLAS detector. A search for the bb\u0305 decay of the Standard Model Higgs boson is performed with the ATLAS experiment using the full dataset recorded at the LHC in Run 1. The integrated luminosities used from pp collisions at \u221a(s)=7 and 8 TeV are 4.7 and 20.3 fb^-1, respectively. The processes considered are associated (W/Z)H production, where W\u2192 e\u03bd/\u03bc\u03bd, Z\u2192 ee/\u03bc\u03bc and Z\u2192\u03bd\u03bd. The observed (expected) deviation from the background-only hypothesis corresponds to a significance of 1.4 (2.6) standard deviations and the ratio of the measured signal yield to the Standard Model expectation is found to be \u03bc = 0.52 \u00b1 0.32 (stat.)\u00b1 0.24 (syst.) for a Higgs boson mass of 125.36 GeV. The analysis procedure is validated by a measurement of the yield of (W/Z)Z production with Z\u2192 bb\u0305 in the same final states as for the Higgs boson search, from which the ratio of the observed signal yield to the Standard Model expectation is found to be 0.74 \u00b1 0.09 (stat.)\u00b1 0.14 (syst.).",
+    "entities": [
+      [262, 267, "DECAY_PRODUCT"],
+      [324, 330, "ENERGY"],
+      [335, 340, "ENERGY"],
+      [353, 363, "LUMINOSITY"],
+      [762, 773, "ENERGY"],
+      [62, 90, "PRODUCTION"],
+      [15, 24, "DECAY_CHANNEL"],
+      [133, 142, "DECAY_CHANNEL"],
+      [345, 348, "LUMINOSITY"],
+      [408, 436, "PRODUCTION"],
+      [843, 860, "PRODUCTION"]
+    ]
+  },
+  {
+    "content": "Measurement and interpretation of differential cross sections for Higgs boson production at \u221a(s)= 13 TeV. Differential Higgs boson (H) production cross sections are sensitive probes for physics beyond the standard model. New physics may contribute in the gluon-gluon fusion loop, the dominant Higgs boson production mechanism at the LHC, and manifest itself through deviations from the distributions predicted by the standard model. Combined spectra for the H\u2192\u03b3\u03b3, H\u2192ZZ, and H\u2192bb\u0305 decay channels and the inclusive Higgs boson production cross section are presented, based on proton-proton collision data recorded with the CMS detector at \u221a(s)= 13 TeV corresponding to an integrated luminosity of 35.9 fb^-1. The transverse momentum spectrum is used to place limits on the Higgs boson couplings to the top, bottom, and charm quarks, as well as its direct coupling to the gluon field. No significant deviations from the standard model are observed in any differential distribution. The measured total cross section is 61.1 \u00b1 6.0 (stat) \u00b1 3.7 (syst) pb, and the precision of the measurement of the differential cross section of the Higgs boson transverse momentum is improved by about 15% with respect to the H\u2192\u03b3\u03b3 channel alone.",
+    "entities": [
+      [255, 273, "PRODUCTION"],
+      [458, 462, "DECAY_NOTATION"],
+      [474, 479, "DECAY_NOTATION"],
+      [637, 649, "ENERGY"],
+      [695, 705, "LUMINOSITY"],
+      [1205, 1209, "ENERGY"],
+      [92, 104, "ENERGY"],
+      [464, 468, "DECAY_NOTATION"]
+    ]
+  },
+  {
+    "content": "Search for Higgs bosons and new particles decaying into two photons at \u221a(s) = 183 GeV. A search for the resonant production of high mass photon pairs associated with a leptonic or hadronic system has been performed using a data sample of 57.7 pb-1 collected at an average center-of-mass energy of 182.6 GeV with the OPAL detector at LEP. No evidence for contributions from non-Standard Model physics processes was observed. The observed candidates are used to place limits on BR (H to gamma gamma) assuming a Standard Model production rate for Higgs boson masses up to 92 GeV, and on the production cross section for a scalar resonance decaying into di-photons up to a mass of 170 GeV. Upper limits on the product of cross section and branching ratios, sigma(e+e- to XY) * BR(X to gamma gamma) * BR(Y to f fbar) as low as 70fb are obtained over the M(X) range 10 - 170 GeV for the case where 10 < M(Y) < 160 GeV and M(X)+M(Y) > 90 GeV, independent of the nature of Y provided it decays to a fermion pair and has negligible width. Higgs scalars which couple only to gauge bosons at Standard Model strength are ruled out up to a mass of 90.0 GeV at the 95% confidence level. Limits are also placed on non-minimal Higgs sectors having triplet representations.",
+    "entities": [
+      [56, 67, "DECAY_PRODUCT"],
+      [71, 86, "ENERGY"],
+      [104, 123, "PRODUCTION"],
+      [238, 247, "LUMINOSITY"],
+      [297, 306, "ENERGY"],
+      [650, 660, "DECAY_PRODUCT"],
+      [991, 1003, "DECAY_PRODUCT"]
+    ]
+  },
+  {
+    "content": "Search for the associated production of a Higgs boson with a top quark pair in final states with a \u03c4 lepton at \u221a(s) = 13 TeV. Results of a search for the standard model Higgs boson produced in association with a top quark pair in final states with \u03c4 leptons are presented. The analyzed dataset corresponds to an integrated luminosity of 35.9 fb^-1 which has been recorded in proton-proton collisions at \u221a(s) = 13 TeV center-of-mass energy by the CMS experiment during LHC Run 2. The sensitivity of the search is improved by using matrix element and machine learning methods to separate the signal from backgrounds. The measured signal rate amounts to 0.72^+0.62_-0.53 times the production rate expected in the standard model, with an observed (expected) significance of 1.4\u03c3 (1.8\u03c3). An upper limit on the signal rate of 2.0 the standard model production rate is set at the 95",
+    "entities": [
+      [61, 75, "ASSOCIATED"],
+      [99, 100, "DECAY_PRODUCT"],
+      [111, 125, "ENERGY"],
+      [212, 226, "ASSOCIATED"],
+      [337, 347, "LUMINOSITY"],
+      [403, 416, "ENERGY"]
+    ]
+  },
+  {
+    "content": "Measurement of the Higgs boson mass in the H \u2192 ZZ^* \u2192 4\u2113 decay channel with \u221a(s)=13 TeV pp collisions using the ATLAS detector at the LHC. A measurement of the Higgs boson mass, m_H in the H \u2192 ZZ^* \u2192 4\u2113 decay channel is presented. The data employed were recorded by the ATLAS detector between 2015-2018 in proton-proton collisions delivered by the Large Hadron Collider at a centre-of-mass energy of \u221a(s)=13 TeV and correspond to an integrated luminosity of 139 fb^-1. An analytic model that takes into account the invariant mass resolution of the four-lepton system on a per-event basis is employed. The measured value of m_H is 124.92\u00b10.19(stat.)^+0.09_-0.06(syst.) GeV.",
+    "entities": [
+      [43, 56, "DECAY_NOTATION"],
+      [76, 87, "ENERGY"],
+      [189, 202, "DECAY_NOTATION"],
+      [400, 411, "ENERGY"],
+      [458, 467, "LUMINOSITY"]
+    ]
+  },
+  {
+    "content": "Search for doubly charged Higgs boson production in multi-lepton final states with the ATLAS detector using proton\u00e2\u0080\u0093proton collisions at \u221a(s)=13 TeV. A search for doubly charged Higgs bosons with pairs of prompt, isolated, highly energetic leptons with the same electric charge is presented. The search uses a proton\u00e2\u0080\u0093proton collision data sample at a centre-of-mass energy of 13\u00c2 TeV corresponding to 36.1 fb^-1 of integrated luminosity recorded in 2015 and 2016 by the ATLAS detector at the LHC. This analysis focuses on the decays H^\u00b1\u00b1\u2192 e^\u00b1e^\u00b1 , H^\u00b1\u00b1\u2192 e^\u00b1\u03bc ^\u00b1 and H^\u00b1\u00b1\u2192\u03bc ^\u00b1\u03bc ^\u00b1 , fitting the dilepton mass spectra in several exclusive signal regions. No significant evidence of a signal is observed and corresponding limits on the production cross-section and consequently a lower limit on m(H^\u00b1\u00b1) are derived at 95% confidence level. With \u2113 ^\u00b1\u2113 ^\u00b1=e^\u00b1e^\u00b1/\u03bc ^\u00b1\u03bc ^\u00b1/e^\u00b1\u03bc ^\u00b1 , the observed lower limit on the mass of a doubly charged Higgs boson only coupling to left-handed leptons varies from 770 to 870\u00c2 GeV (850\u00c2 GeV expected) for B(H^\u00b1\u00b1\u2192\u2113 ^\u00b1\u2113 ^\u00b1)=100",
+    "entities": [
+      [138, 150, "ENERGY"],
+      [379, 386, "ENERGY"],
+      [404, 414, "LUMINOSITY"],
+      [11, 48, "PRODUCTION"],
+      [536, 548, "DECAY_NOTATION"],
+      [551, 564, "DECAY_NOTATION"],
+      [569, 582, "DECAY_NOTATION"]
+    ]
+  },
+  {
+    "content": "Observation of an excess of events in the search for the Standard Model Higgs boson in the H\u2192 ZZ^(*)\u2192 4\u2113 channel with the ATLAS detector.. A search for the Standard Model Higgs boson in the decay channel H\u2192 ZZ^(\u00e2\u0088\u0097)\u2192 l+l\u00e2\u0088\u0092l'+l'\u00e2\u0088\u0092, where l,l' = e,\u03bc, using proton-proton collisions at sqrts=7 and 8 TeV recorded with the ATLAS detector is presented. The four lepton invariant mass distribution is compared with Standard Model background expectations to derive upper limits on the cross section of a Standard Model Higgs boson with a mass between 110 GeV and 600 GeV.",
+    "entities": [
+      [91, 104, "DECAY_NOTATION"],
+      [297, 302, "ENERGY"],
+      [204, 229, "DECAY_NOTATION"],
+      [285, 292, "ENERGY"]
+    ]
+  },
+  {
+    "content": "Search for invisibly decaying Higgs bosons in e^+e^-\u2192 Z^0h^0 production at \u221a(s) = 183 - 209 GeV. A search is performed for Higgs bosons decaying into invisible final states, produced in association with a Zo boson in e+e- collisions at energies between 183 and 209 GeV. The search is based on data samples collected by the OPAL detector at LEP corresponding to an integrated luminosity of about 660 pb-1. The analysis aims to select events containing the hadronic decay products of the Zo boson and large missing momentum, as expected from Higgs boson decay into a pair of stable weakly interacting neutral particles, such as the lightest neutralino in the Minimal Supersymmetric Standard Model. The same analysis is applied to a search for nearly invisible Higgs boson cascade decays into stable weakly interacting neutral particles. No excess over the expected background from Standard Model processes is observed. Limits on the production of invisibly decaying Higgs bosons produced in association with a Zo boson are derived. Assuming a branching ratio BR(ho->invisible)=1, a lower limit of 108.2 GeV is placed on the Higgs boson mass at the 95% confidence level. Limits on the production of nearly invisibly decaying Higgs bosons are also obtained.",
+    "entities": [
+      [75, 96, "ENERGY"],
+      [150, 172, "DECAY_PRODUCT"],
+      [205, 213, "ASSOCIATED"],
+      [253, 260, "DECAY_PRODUCT"],
+      [261, 269, "ENERGY"],
+      [395, 403, "LUMINOSITY"],
+      [1008, 1016, "ASSOCIATED"],
+      [11, 29, "DECAY_CHANNEL"],
+      [565, 616, "DECAY_PRODUCT"],
+      [945, 963, "DECAY_CHANNEL"],
+      [1196, 1221, "DECAY_CHANNEL"],
+      [46, 71, "PRODUCTION"]
+    ]
+  },
+  {
+    "content": "Search for neutral MSSM Higgs bosons decaying to \u03c4^+ \u03c4^- pairs in proton-proton collisions at \u221a(s) = 7 TeV with the ATLAS detector. A search for neutral Higgs bosons decaying to pairs of tau leptons with the ATLAS detector at the LHC is presented. The analysis is based on proton-proton collisions at a center-of-mass energy of 7 TeV, recorded in 2010 and corresponding to an integrated luminosity of 36 pb^-1. After signal selection, 276 events are observed in this data sample. The observed number of events is consistent with the total expected background of 269 +/- 36 events. Exclusion limits at the 95% confidence level are derived for the production cross section of a generic Higgs boson phi as a function of the Higgs boson mass and for A/H/h production in the Minimal Supersymmetric Standard Model (MSSM) as a function of the parameters m_A and tan(beta).",
+    "entities": [
+      [94, 106, "ENERGY"],
+      [178, 198, "DECAY_PRODUCT"],
+      [328, 333, "ENERGY"],
+      [401, 409, "LUMINOSITY"],
+      [49, 62, "DECAY_PRODUCT"]
+    ]
+  },
+  {
+    "content": "Search for the charged Higgs boson in the etau and mutau dilepton channels of top quark pair decays. The large top quark production cross section at the Large Hadron Collider offers the opportunity to search for the charged Higgs boson as the decay t\u2192 H^+b\u2192\u03c4^+\u03bd b can be large in extensions of the standard model, if the mass is lighter than the top quark mass. A direct search for the charged Higgs boson in events with one lepton (electron or muon), at least two jets, missing transverse energy, and one hadronically decaying tau lepton has been performed in 36 pb^-1 of data collected in proton-proton collisions at \u221a(s)=7 TeV. We do not find a signal in our search and derive an upper limit on the branching ratio BR(t\u2192 H^+b)\u2243 0.25-0.28 for masses between 80 and 140 GeV/c^2, when assuming BR(H^+\u2192\u03c4^+\u03bd)=1.",
+    "entities": [
+      [561, 569, "LUMINOSITY"],
+      [619, 630, "ENERGY"],
+      [78, 99, "DECAY_CHANNEL"],
+      [111, 131, "PRODUCTION"],
+      [249, 263, "DECAY_NOTATION"]
+    ]
+  },
+  {
+    "content": "Measurement of the properties of a Higgs boson in the four-lepton final state. The properties of a Higgs boson candidate are measured in the H \u2192 ZZ \u2192 4l decay channel, with l=e,\u03bc, using data from pp collisions corresponding to an integrated luminosity of 5.1 inverse femtobarns at center-of-mass energy of \u221a(s)=7 TeV and 19.7 inverse femtobarns at \u221a(s)=8 TeV, recorded with the CMS detector at the LHC. The new boson is observed as a narrow resonance with a local significance of 6.8 standard deviations, a measured mass of 125.6\u00b10.4 (stat.) \u00b10.2 (syst.) GeV, and a total width less than 3.4 GeV at a 95% confidence level. The production cross section of the new boson times the branching fraction to four leptons is measured to be 0.93^+0.26_-0.23 (stat.)^+0.13_-0.09 (syst.) times that predicted by the standard model. Its spin-parity properties are found to be consistent with the expectations for the standard model Higgs boson. The hypotheses of a pseudoscalar and all tested spin-one boson hypotheses are excluded at a 99% confidence level or higher. All tested spin-two boson hypotheses are excluded at a 95% confidence level or higher.",
+    "entities": [
+      [141, 152, "DECAY_NOTATION"],
+      [306, 316, "ENERGY"],
+      [348, 358, "ENERGY"],
+      [255, 277, "LUMINOSITY"],
+      [321, 344, "LUMINOSITY"]
+    ]
+  },
+  {
+    "content": "Search for Heavy Resonances Decaying to a W or Z Boson and a Higgs Boson in the qq\u0305^(')bb\u0305 Final State in pp Collisions at \u221a(s) = 13 TeV with the ATLAS Detector. A search for heavy resonances decaying to a W or Z boson and a Higgs boson in the qq\u0305^(')bb\u0305 final state is described. The search uses 36.1 fb^-1 of proton-proton collision data at \u221a(s) = 13 collected by the ATLAS detector at the CERN Large Hadron Collider in 2015 and 2016. The data are in agreement with the Standard Model expectations, with the largest excess found at a resonance mass of 3.0 TeV with a local (global) significance of 3.3 (2.2) \u03c3. The results are presented in terms of constraints on a simplified model with a Heavy Vector Triplet. Upper limits are set on the production cross-section times branching ratio for resonances decaying to a W (Z) boson and a Higgs boson in the mass range between 1.1 and 3.8 . The limits range between 83 and 1.6 fb (77 and 1.1 fb) at 95% confidence level.",
+    "entities": [
+      [42, 54, "DECAY_PRODUCT"],
+      [123, 136, "ENERGY"],
+      [206, 218, "DECAY_PRODUCT"],
+      [297, 307, "LUMINOSITY"],
+      [343, 362, "ENERGY"]
+    ]
+  },
+  {
+    "content": "Measurement of gluon fusion and vector boson fusion Higgs boson production cross-sections in the H \u2192 WW^*\u2192 e\u03bd\u03bc\u03bd decay channel in pp collisions at \u221a(s) = 13 TeV with the ATLAS detector. The Higgs boson production cross-sections in proton-proton collisions are measured in the H\u2192 WW^\u2217\u2192 e\u03bd\u03bc\u03bd decay channel. The proton-proton collision data were produced at the Large Hadron Collider at a centre-of-mass energy of 13 TeV and recorded by the ATLAS detector in 2015 and 2016, corresponding to an integrated luminosity of 36.1 fb^-1. The gluon fusion and vector boson fusion cross-sections time the H\u2192 WW^\u2217 branching ratio are measured to be 12.6 ^+1.3_-1.2 (stat.) ^+1.9_-1.8(sys.) pb and 0.50 ^+0.24_-0.23 (stat.) \u00b1 0.18(sys.) pb, respectively, in agreement with the Standard Model predictions.",
+    "entities": [
+      [15, 27, "DECAY_PRODUCT"],
+      [32, 74, "PRODUCTION"],
+      [146, 159, "ENERGY"],
+      [410, 416, "ENERGY"],
+      [515, 525, "LUMINOSITY"],
+      [531, 543, "PRODUCTION"],
+      [548, 567, "PRODUCTION"],
+      [592, 599, "DECAY_NOTATION"],
+      [97, 111, "DECAY_NOTATION"],
+      [275, 288, "DECAY_NOTATION"]
+    ]
+  },
+  {
+    "content": "Measurement of inclusive and differential Higgs boson production cross sections in the diphoton decay channel in proton-proton collisions at \u221a(s)= 13 TeV. Measurements of the inclusive and differential production cross sections for the Higgs boson in the diphoton decay channel are performed using the data set of proton-proton collisions at \u221a(s)=13 TeV collected by the CMS experiment at the LHC in 2016 and corresponding to an integrated luminosity of 35.9 fb^\u00e2\u0088\u00921. The cross sections are measured in a fiducial phase space defined by a set of requirements on the isolation and kinematic variables of the photons. Differential cross sections are measured as functions of the kinematic properties of the diphoton system and the event. A subset of the measurements is performed in regions of the fiducial phase space, where relative contributions of specific Higgs boson production mechanisms are enhanced. The total cross section in the chosen fiducial phase space is measured to be 84 \u00c2\u00b1 11 (stat) \u00c2\u00b1 7 (syst) fb = 84 \u00c2\u00b1 13 fb, to be compared with a theoretical prediction of 73 \u00c2\u00b1 4 fb. All measurements are found to be in agreement with the theoretical predictions for the standard model Higgs boson with a mass of 125.09 GeV within the experimental and theoretical uncertainties.",
+    "entities": [
+      [141, 154, "ENERGY"],
+      [342, 353, "ENERGY"],
+      [454, 466, "LUMINOSITY"],
+      [87, 109, "DECAY_CHANNEL"],
+      [255, 277, "DECAY_CHANNEL"]
+    ]
+  },
+  {
+    "content": "Limits on the production of the Standard Model Higgs Boson in pp collisions at \u221a(s) =7 TeV with the ATLAS detector. A search for the Standard Model Higgs boson at the Large Hadron Collider (LHC) running at a centre-of-mass energy of 7 TeV is reported, based on a total integrated luminosity of up to 40 pb-1 collected by the ATLAS detector in 2010. Several Higgs boson decay channels: H \u2192\u03b3\u03b3, H \u2192 ZZ^(*)\u2192 llll, H \u2192 ZZ \u2192 ll\u03bd\u03bd, H \u2192 ZZ \u2192 llqq, H \u2192 WW^(*)\u2192 l\u03bdl\u03bd and H \u2192 WW \u2192 l\u03bdqq (l is e, \u03bc) are combined in a mass range from 110 GeV to 600 GeV. The highest sensitivity is achieved in the mass range between 160 GeV and 170 GeV, where the expected 95% CL exclusion sensitivity is at Higgs boson production cross sections 2.3 times the Standard Model prediction. Upper limits on the cross section for its production are determined. Models with a fourth generation of heavy leptons and quarks with Standard Model-like couplings to the Higgs boson are also investigated and are excluded for a Higgs boson mass in the range from 140 GeV to 185 GeV.",
+    "entities": [
+      [79, 90, "ENERGY"],
+      [233, 238, "ENERGY"],
+      [300, 307, "DECAY_PRODUCT"],
+      [385, 390, "DECAY_NOTATION"],
+      [410, 423, "DECAY_NOTATION"],
+      [425, 438, "DECAY_NOTATION"],
+      [440, 456, "DECAY_NOTATION"],
+      [461, 474, "DECAY_NOTATION"],
+      [392, 408, "DECAY_NOTATION"]
+    ]
+  },
+  {
+    "content": "Search for the Standard-Model Higgs boson decaying to tau pairs in proton-proton collisions at sqrt(s) = 7 and 8 TeV. A search for the standard-model Higgs boson decaying to \u03c4 pairs is performed using events recorded by the CMS experiment at the LHC in 2011 and 2012 at a centre-of-mass energy of 7 and 8 TeV respectively. The dataset corresponds to an integrated luminosity of 4.9 fb^-1 at a centre-of-mass energy of 7 TeV and 19.4 fb^-1 at 8 TeV. The \u03c4-pair invariant mass spectrum is studied in five different final states corresponding to the decay modes of the two \u03c4 leptons. An excess of events is observed over a broad range of Higgs mass hypotheses, with a maximum local significance of 2.93 standard deviations at m_ H= 120 GeV. The excess is compatible with the presence of a standard-model Higgs boson of mass 125 GeV.",
+    "entities": [
+      [54, 63, "DECAY_PRODUCT"],
+      [95, 117, "ENERGY"],
+      [174, 181, "DECAY_PRODUCT"],
+      [297, 308, "ENERGY"],
+      [378, 387, "LUMINOSITY"],
+      [418, 423, "ENERGY"],
+      [428, 438, "LUMINOSITY"],
+      [442, 448, "ENERGY"]
+    ]
+  },
+  {
+    "content": "Search for heavy resonances decaying to a W or Z boson and a Higgs boson in final states with leptons and b-jets in 36.1 fb^-1 of pp collision data at \u221a(s) = 13 with the ATLAS detector. A search is presented for new resonances decaying to a W or Z boson and a 125 Higgs boson (h) in the \u03bd\u03bd\u0305bb\u0305, \u2113^\u00b1\u03bdbb\u0305, and \u2113^+\u2113^-bb\u0305 final states, where \u2113 ^\u00b1= e^\u00b1 or \u03bc^\u00b1, in pp collisions at \u221a(s) = 13 . The data used corresponds to a total of 36.1 fb^-1 of integrated luminosity collected with the ATLAS detector at the Large Hadron Collider from the 2015 and 2016 data taking periods. The search is conducted by examining the reconstructed invariant or transverse mass distributions of Wh and Zh candidates for evidence of a localised excess. The results are interpreted in terms of constraints on the production cross-section times branching fraction of heavy W^' and Z^' resonances in Heavy Vector Triplet models or the CP odd scalar boson A in Two-Higgs-Doublet models over the mass range from 220 GeV up to 5 TeV. No significant excess is observed. Limits are placed at 95",
+    "entities": [
+      [42, 54, "DECAY_PRODUCT"],
+      [116, 126, "LUMINOSITY"],
+      [241, 253, "DECAY_PRODUCT"],
+      [428, 438, "LUMINOSITY"],
+      [151, 160, "ENERGY"],
+      [376, 385, "ENERGY"]
+    ]
+  }
+]

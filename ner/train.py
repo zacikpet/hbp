@@ -5,7 +5,7 @@ from spacy.util import minibatch
 
 from converters import json_to_spacy
 
-TRAIN_DATA = json_to_spacy('traindata_v1.1.json')
+TRAIN_DATA = json_to_spacy('traindata_v1.3.json')
 
 
 def train_spacy(train_data, iterations):
@@ -40,7 +40,7 @@ def train_spacy(train_data, iterations):
 
 
 if __name__ == '__main__':
-    nlp = train_spacy(TRAIN_DATA, 200)
+    nlp = train_spacy(TRAIN_DATA, 50)
 
     # Save our trained Model
     modelfile = input("Enter your Model Name: ")

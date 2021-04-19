@@ -4,9 +4,9 @@ import random
 
 
 def get_article_text(title, abstract):
-    text = (title or '') + '. ' + (abstract or '')
+    text = (title or '') + ' . ' + (abstract or '')
 
-    text = text.replace('%', '\\%')
+    text = text.replace('%', '\\%').replace('\rightarrow', '->')
 
     try:
         unicode_text = latex2text.latex2text(text, tolerant_parsing=True)
@@ -18,6 +18,8 @@ def get_article_text(title, abstract):
         unicode_text = text
 
     unicode_text = ' '.join(unicode_text.split())
+
+    unicode_text = unicode_text.replace('\rightarrow', '->')
 
     unicode_text = unicode_text.replace('\n', ' ').replace('\r', '')
 
