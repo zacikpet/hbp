@@ -1,6 +1,5 @@
 
 .idea/hbp-server.iml
-.env
 .idea/
 .vscode/
 # Created by https://www.toptal.com/developers/gitignore/api/python,pycharm,vscode
