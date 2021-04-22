@@ -1,4 +1,4 @@
-FROM centos/python-36-centos7:20200917-e3429b0
+FROM centos/python-36-centos7
 
 WORKDIR /app
 
