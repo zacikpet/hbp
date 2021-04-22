@@ -7,4 +7,6 @@ Local development server
     pipenv run flask run
   
 
- 
+To make the main route available on the internet:
+
+    oc annotate route <route> router.cern.ch/network-visibility=Intranet
