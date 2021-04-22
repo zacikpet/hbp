@@ -1,8 +1,6 @@
-FROM centos/python-36-centos7
+FROM python:3.8
 
 WORKDIR /app
-
-USER root
 
 COPY ./requirements.txt ./
 
@@ -13,6 +11,8 @@ RUN pip install -r requirements.txt
 COPY . .
 
 EXPOSE 8080
+
+RUN ["python", "-c", "import nltk; nltk.download('stopwords'); nltk.download('wordnet')"]
 
 USER 1001
 

@@ -3,9 +3,6 @@ import nltk
 from nltk import WordNetLemmatizer
 from nltk.corpus import stopwords
 
-nltk.download('wordnet')
-nltk.download('stopwords')
-
 stemmer = WordNetLemmatizer()
 
 
