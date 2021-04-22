@@ -9,4 +9,4 @@ Local development server
 
 To make the main route available on the internet:
 
-    oc annotate route <route> router.cern.ch/network-visibility=Intranet
+    oc annotate route <route> router.cern.ch/network-visibility=Internet
