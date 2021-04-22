@@ -137,7 +137,7 @@ class HBPService():
 
     def create_feedback(self, data):
         data['date'] = datetime.now()
-        return self._feedbacks.insert_one({data})
+        return self._feedbacks.insert_one(data)
 
     def read_all_feedbacks(self):
         return self._feedbacks.find({})
