@@ -144,7 +144,9 @@ class HBPService():
 
     def stats(self):
         count = len(list(self._papers.find({})))
-        update_history = list(self._updates.find({}))
+        update_history = list(
+            self._updates.find({}).sort('date', pymongo.DESCENDING)
+        )
         return {
             'total_papers': count,
             'updates': update_history
