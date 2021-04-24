@@ -215,4 +215,4 @@ def post_feedback():
 @ service.verification_required(get_jwt_identity)
 def get_feedback():
     feedbacks = service.read_all_feedbacks()
-    return jsonify(feedback=feedbacks)
+    return jsonify(feedbacks)

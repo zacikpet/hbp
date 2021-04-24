@@ -140,7 +140,7 @@ class HBPService():
         return self._feedbacks.insert_one(data)
 
     def read_all_feedbacks(self):
-        return self._feedbacks.find({})
+        return list(self._feedbacks.find({}))
 
     def stats(self):
         count = len(list(self._papers.find({})))
