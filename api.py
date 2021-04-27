@@ -17,7 +17,7 @@ api = Blueprint('api', __name__)
 service = HBPService(mongo)
 
 
-@ api.app_errorhandler(exception.UserNotVerifiedException)
+@api.app_errorhandler(exception.UserNotVerifiedException)
 def not_verified_handler():
     return jsonify(message='Verification is required for this action.'), 401
 
@@ -41,7 +41,7 @@ def required_fields(*fields):
     return decorator
 
 
-@ api.after_request
+@api.after_request
 def refresh_expiring_jwt(response):
     try:
         exp_timestamp = get_jwt()['exp']
@@ -55,8 +55,8 @@ def refresh_expiring_jwt(response):
         return response
 
 
-@ api.route('/register', methods=['POST'])
-@ required_fields('email', 'password', 'firstname', 'lastname')
+@api.route('/register', methods=['POST'])
+@required_fields('email', 'password', 'firstname', 'lastname')
 def register():
     try:
         data = request.get_json()
@@ -70,8 +70,8 @@ def register():
         return jsonify(message='User already exists'), 409
 
 
-@ api.route('/login', methods=['POST'])
-@ required_fields('email', 'password')
+@api.route('/login', methods=['POST'])
+@required_fields('email', 'password')
 def login():
 
     try:
@@ -94,15 +94,15 @@ def login():
         return jsonify(message="Invalid password"), 404
 
 
-@ api.route('/logout', methods=['POST'])
+@api.route('/logout', methods=['POST'])
 def logout():
     response = jsonify(message="Logout successful.")
     unset_jwt_cookies(response)
     return response
 
 
-@ api.route('/users/current', methods=['GET'])
-@ jwt_required()
+@api.route('/users/current', methods=['GET'])
+@jwt_required()
 def get_current_user():
     email = get_jwt_identity()
 
@@ -114,8 +114,8 @@ def get_current_user():
         return jsonify(message='An account with this identity does not exist'), 404
 
 
-@ api.route('/users/delete', methods=['DELETE'])
-@ jwt_required()
+@api.route('/users/delete', methods=['DELETE'])
+@jwt_required()
 def delete_user():
     email = get_jwt_identity()
 
@@ -127,7 +127,7 @@ def delete_user():
         return jsonify(message='Account does not exist'), 404
 
 
-@ api.route('/verify-auth', methods=['GET'])
+@api.route('/verify-auth', methods=['GET'])
 def verify_auth():
     token = verify_jwt_in_request(optional=True)
 
@@ -143,7 +143,7 @@ def verify_auth():
     return jsonify(message='No auth token provided.', logged_in=False, user=None)
 
 
-@ api.route('/papers/<id>', methods=['GET'])
+@api.route('/papers/<id>', methods=['GET'])
 def get_paper(id):
     try:
         paper = service.read_paper(id)
@@ -153,9 +153,9 @@ def get_paper(id):
         return jsonify(message='This article does not exist'), 404
 
 
-@ api.route('/papers/<id>', methods=['PATCH'])
-@ jwt_required()
-@ service.verification_required(get_jwt_identity)
+@api.route('/papers/<id>', methods=['PATCH'])
+@jwt_required()
+@service.verification_required(get_jwt_identity)
 def patch_paper(id):
     data = request.get_json()
 
@@ -166,9 +166,9 @@ def patch_paper(id):
         pass
 
 
-@ api.route('/papers/<id>', methods=['DELETE'])
-@ jwt_required()
-@ service.verification_required(get_jwt_identity)
+@api.route('/papers/<id>', methods=['DELETE'])
+@jwt_required()
+@service.verification_required(get_jwt_identity)
 def delete_paper(id):
     try:
         service.delete_paper(id)
@@ -177,42 +177,50 @@ def delete_paper(id):
         return jsonify(message='This article does not exist.'), 404
 
 
-@ api.route('/papers', methods=['GET'])
+@api.route('/papers', methods=['GET'])
 def get_papers():
     papers = service.read_all_papers()
     return jsonify(papers), 200
 
 
-@ api.route('/mass-limit', methods=['GET'])
+@api.route('/mass-limit', methods=['GET'])
 def get_mass_limit():
     papers_with_limit = service.get_mass_limit()
     return jsonify(papers_with_limit), 200
 
 
-@ api.route('/precision', methods=['GET'])
+@api.route('/precision', methods=['GET'])
 def get_precision():
     papers_with_precision = service.get_precision()
     return jsonify(papers_with_precision), 200
 
 
-@ api.route('/stats', methods=['GET'])
-@ jwt_required()
-@ service.verification_required(get_jwt_identity)
+@api.route('/stats', methods=['GET'])
+@jwt_required()
+@service.verification_required(get_jwt_identity)
 def get_stats():
     stats = service.stats()
     return jsonify(stats), 200
 
 
-@ api.route('/feedback', methods=['POST'])
+@api.route('/feedback', methods=['POST'])
 def post_feedback():
     data = request.get_json()
     service.create_feedback(data)
     return jsonify(success=True)
 
 
-@ api.route('/feedback', methods=['GET'])
-@ jwt_required()
-@ service.verification_required(get_jwt_identity)
+@api.route('/feedback', methods=['GET'])
+@jwt_required()
+@service.verification_required(get_jwt_identity)
 def get_feedback():
     feedbacks = service.read_all_feedbacks()
     return jsonify(feedbacks)
+
+
+@api.route('/admin-requests', methods=['GET'])
+@jwt_required()
+@service.verification_required(get_jwt_identity)
+def get_admin_requests():
+    requests = service.get_admin_requests()
+    return jsonify(requests)

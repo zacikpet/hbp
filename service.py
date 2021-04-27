@@ -255,3 +255,7 @@ class HBPService():
             {'precision': {'$exists': True, '$ne': None}})
         sorted_papers = papers_with_precision.sort('date', pymongo.ASCENDING)
         return list(sorted_papers)
+
+    def get_admin_requests(self):
+        requests = self._users.find({'verified': False})
+        return list([self.user_to_dto(user) for user in requests])
