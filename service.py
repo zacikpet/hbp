@@ -13,7 +13,7 @@ from datetime import datetime
 
 from exception import (
     NoSuchArticleException, UserAlreadyExistsException, UserNotVerifiedException,
-    InvalidPasswordException, MissingFieldsException, NoSuchUserException
+    InvalidPasswordException, MissingFieldsException, NoSuchUserException, UserAlreadyVerifiedException
 )
 
 
@@ -30,6 +30,7 @@ class HBPService():
             'lastname': user['lastname'],
             'email': user['email'],
             'verified': user['verified'],
+            '_id': user['_id']
         }
 
     def read_all_papers(self):
@@ -259,3 +260,28 @@ class HBPService():
     def get_admin_requests(self):
         requests = self._users.find({'verified': False})
         return list([self.user_to_dto(user) for user in requests])
+
+    def verify_admin(self, id):
+        request = self._users.find_one({'_id': ObjectId(id)})
+
+        if request is None:
+            raise NoSuchArticleException
+
+        if request['verified']:
+            raise UserAlreadyVerifiedException
+
+        return self._users.update_one(
+            {'_id': ObjectId(id)},
+            {'$set': {'verified': True}}
+        )
+
+    def decline_admin(self, id):
+        request = self._users.find_one({'_id': ObjectId(id)})
+
+        if request is None:
+            raise NoSuchArticleException
+
+        if request['verified']:
+            raise UserAlreadyVerifiedException
+
+        return self._users.delete_one({'_id': ObjectId(id)})

@@ -18,6 +18,10 @@ class UserNotVerifiedException(Exception):
     pass
 
 
+class UserAlreadyVerifiedException(Exception):
+    pass
+
+
 class MissingFieldsException(Exception):
     def __init__(self, missing_fields):
         self.message = ', '.join(missing_fields)

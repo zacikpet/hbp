@@ -224,3 +224,29 @@ def get_feedback():
 def get_admin_requests():
     requests = service.get_admin_requests()
     return jsonify(requests)
+
+
+@api.route('/admin-requests/verify/<id>', methods=['POST'])
+@jwt_required()
+@service.verification_required(get_jwt_identity)
+def verify_admin(id):
+    try:
+        service.verify_admin(id)
+        return jsonify(message='Successfully verified.')
+    except exception.NoSuchUserException:
+        return jsonify(message='This user does not exist.'), 404
+    except exception.UserAlreadyVerifiedException:
+        return jsonify(message='This user is already verified.'), 400
+
+
+@api.route('/admin-requests/decline/<id>', methods=['POST'])
+@jwt_required()
+@service.verification_required(get_jwt_identity)
+def decline_admin(id):
+    try:
+        service.decline_admin(id)
+        return jsonify(message='Successfully declined.')
+    except exception.NoSuchUserException:
+        return jsonify(message='This user does not exist.'), 404
+    except exception.UserAlreadyVerifiedException:
+        return jsonify(message='This user is already verified.'), 400
