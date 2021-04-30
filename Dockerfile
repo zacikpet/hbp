@@ -12,7 +12,7 @@ COPY . .
 
 EXPOSE 8080
 
-RUN ["python", "-c", "import nltk; nltk.download('stopwords'); nltk.download('wordnet')"]
+RUN python download_nltk.py
 
 USER 1001
 

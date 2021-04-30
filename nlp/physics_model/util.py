@@ -3,6 +3,8 @@ import nltk
 from nltk import WordNetLemmatizer
 from nltk.corpus import stopwords
 
+nltk.data.path.append('/app/nltk_data')
+
 stemmer = WordNetLemmatizer()
 
 
