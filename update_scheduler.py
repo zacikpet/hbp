@@ -7,7 +7,7 @@ def update():
     os.system('flask update --trigger=auto')
 
 
-schedule.every().day.at("10:15").do(update)
+schedule.every().day.at("10:30").do(update)
 
 
 # Check every 5 minutes if update should be ran
