@@ -20,6 +20,7 @@ bcrypt = "*"
 gunicorn = "*"
 mongomock = "*"
 pytest = "*"
+schedule = "*"
 
 [dev-packages]
 autopep8 = "*"

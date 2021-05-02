@@ -14,6 +14,8 @@ EXPOSE 8080
 
 RUN python download_nltk.py
 
+RUN python update_scheduler.py
+
 USER 1001
 
 CMD ["gunicorn", "--bind", "0.0.0.0:8080", "wsgi:app"]
