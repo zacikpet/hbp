@@ -4,4 +4,4 @@
 python update_scheduler.py &
 
 # Run WSGI service
-gunicorn wsgi:app
+gunicorn --bind 0.0.0.0:8080 wsgi:app
